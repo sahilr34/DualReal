@@ -218,4 +218,21 @@ public class ScoreManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
+    public void PauseScoring()
+    {
+        isScoring = false;
+        CancelInvoke(nameof(AddScore));
+    }
+
+    public void ResumeScoring()
+    {
+        if (isScoring)
+            return;
+
+        isScoring = true;
+
+        CancelInvoke(nameof(AddScore));
+        InvokeRepeating(nameof(AddScore), 1f, 1f);
+    }
 }
