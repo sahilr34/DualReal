@@ -1,14 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
+//CHANGES FOR SAHIL 
+//INSIDE START FUNCTION
+//INSIDE IENUMERATOR METHOD RIGHT ROUTINE
+
 public class TutorialUIManager : MonoBehaviour
 {
     private const string TutorialKey = "TutorialCompleted";
 
     public static TutorialUIManager Instance;
-
-
-
     public enum TutorialState
     {
         Left,
@@ -69,11 +70,13 @@ public class TutorialUIManager : MonoBehaviour
             if (tutorialPanel != null)
                 Destroy(tutorialPanel);
 
-            //Enable Obstacle Spawner script if it is not null
+            //CHANGES FOR SAHIL
+            //JUST ON YOUR OBSTACLE SPAWNING SCRIPT
             if (obstacleSpawner != null)
                 obstacleSpawner.enabled = true;
 
-            //Resume Score Counting if it is not null
+            //CHANGES FOR SAHIL
+            //JUST ON YOUR SCORING SCRIPT
             if (scoreManager != null)
                 scoreManager.ResumeScoring();
 
@@ -86,11 +89,13 @@ public class TutorialUIManager : MonoBehaviour
 
         //if complete tutorial UI is not displayed yet
 
-        //Disable the obstacles from spawning through ObjectSpawner script
+        //CHANGES FOR SAHIL
+        //JUST OFF YOUR OBSTACLE SPAWNING SCRIPT
         if (obstacleSpawner != null)
             obstacleSpawner.enabled = false;
 
-        //Stop ScoreManager from increasing score
+        //CHANGES FOR SAHIL
+        //JUST OFF YOUR SCORING SCRIPT
         if (scoreManager != null)
             scoreManager.PauseScoring();
 
@@ -166,11 +171,13 @@ public class TutorialUIManager : MonoBehaviour
         if (screenPartition != null)
             Destroy(screenPartition);
 
-        //Enable Obstacle Spawner script if it is not null
+        //CHANGES FOR SAHIL
+        //JUST ON YOUR OBSTACLE SPAWNING SCRIPT
         if (obstacleSpawner != null)
             obstacleSpawner.enabled = true;
 
-        //Resume Score Counting if it is not null
+        //CHANGES FOR SAHIL
+        //JUST ON YOUR SCORING SCRIPT
         if (scoreManager != null)
             scoreManager.ResumeScoring();
 

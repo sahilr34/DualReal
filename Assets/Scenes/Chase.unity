@@ -2272,7 +2272,7 @@ MonoBehaviour:
   rightTutorial: {fileID: 2043763547}
   obstacleSpawner: {fileID: 1471708534}
   scoreManager: {fileID: 547778754}
-  isTesting: 0
+  isTesting: 1
   fadeDuration: 0.4
 --- !u!1 &1903562707
 GameObject:
