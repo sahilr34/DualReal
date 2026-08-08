@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ReviveManager : MonoBehaviour
 {
     [Header("UI")]
-    public Text timerText;
+    public TMP_Text timerText;
 
     [Header("Settings")]
     public float reviveTimer = 10f;

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameOverUI : MonoBehaviour
 {
-    public Text finalScoreText;
+    public TMP_Text finalScoreText;
     public Button restartButton;
     public Button mainMenuButton;
 
@@ -18,7 +19,7 @@ public class GameOverUI : MonoBehaviour
     private void Start()
     {
         finalScore = PlayerPrefs.GetInt("FinalScore", 0);
-        finalScoreText.text = "Final Score: " + finalScore;
+        finalScoreText.text = finalScore.ToString();
 
         restartButton.onClick.AddListener(OnRestartButtonClick);
         mainMenuButton.onClick.AddListener(GoToMainMenu);
@@ -74,7 +75,7 @@ public class GameOverUI : MonoBehaviour
         rewardClaimed = true;
         finalScore *= 2;
         PlayerPrefs.SetInt("FinalScore", finalScore);
-        finalScoreText.text = "Final Score: " + finalScore;
+        finalScoreText.text = finalScore.ToString();
 
         Debug.Log("🎯 Score doubled after watching ad!");
     }

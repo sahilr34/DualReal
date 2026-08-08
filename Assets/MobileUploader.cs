@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
+using TMPro;
 
 public class MobileUploader : MonoBehaviour
 {
-    public InputField mobileInput;
+    public TMP_InputField mobileInput;
 
     [Header("Google Apps Script URL")]
     public string scriptURL = "https://script.google.com/macros/s/AKfycbxRknu2JN_IXR8jBSERuN33hUkDOGwQMuj59qaIeTLPwTY-Z53_hnAbay4M2NUxVWTHaQ/exec";

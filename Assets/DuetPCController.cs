@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class DuetPCController : MonoBehaviour
 {
@@ -11,73 +12,50 @@ public class DuetPCController : MonoBehaviour
 
     private void Update()
     {
-        // Keyboard Controls
-        if (Input.GetKey(KeyCode.A))
+
+        // Mobile Controls as well as PC Controls
+        if (Pointer.current == null)
+            return;
+
+        // Rotate ONLY while pressing/touching
+        if (Pointer.current.press.isPressed)
         {
-            dir = -1f;
-            if (!leftTutorialDone &&
-          TutorialUIManager.Instance != null &&
-          TutorialUIManager.Instance.IsTutorialActive)
+            Vector2 pointerPos = Pointer.current.position.ReadValue();
+
+            if (pointerPos.x < Screen.width * 0.5f)
             {
-                leftTutorialDone = true;
-                TutorialUIManager.Instance.OnLeftTutorialCompleted();
+                dir = -1f;
+
+                if (!leftTutorialDone &&
+                    TutorialUIManager.Instance != null &&
+                    TutorialUIManager.Instance.IsTutorialActive)
+                {
+                    leftTutorialDone = true;
+                    TutorialUIManager.Instance.OnLeftTutorialCompleted();
+                }
+            }
+            else
+            {
+                dir = 1f;
+
+                if (!rightTutorialDone &&
+                    TutorialUIManager.Instance != null &&
+                    TutorialUIManager.Instance.IsTutorialActive)
+                {
+                    rightTutorialDone = true;
+                    TutorialUIManager.Instance.OnRightTutorialCompleted();
+                }
             }
         }
-            
-        else if (Input.GetKey(KeyCode.D))
-        {
-            dir = 1f;
-            if (!rightTutorialDone &&
-        TutorialUIManager.Instance != null &&
-        TutorialUIManager.Instance.IsTutorialActive)
-            {
-                rightTutorialDone = true;
-                TutorialUIManager.Instance.OnRightTutorialCompleted();
-            }
-        }
+
         else
             dir = 0f;
 
-        // Mobile Controls
-        if (Input.touchCount > 0)
+        // Rotate only when dir != 0
+        if (dir != 0f)
         {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began ||
-                touch.phase == TouchPhase.Stationary ||
-                touch.phase == TouchPhase.Moved)
-            {
-                if (touch.position.x < Screen.width / 2)
-                {
-                    dir = -1f;
-
-                    if (!leftTutorialDone && TutorialUIManager.Instance != null &&
-                        TutorialUIManager.Instance.IsTutorialActive)
-                    {
-                        leftTutorialDone = true;
-                        TutorialUIManager.Instance.OnLeftTutorialCompleted();
-                    }
-                }
-                else
-                {
-                    dir = 1f;
-                    if (!rightTutorialDone && TutorialUIManager.Instance != null &&
-                        TutorialUIManager.Instance.IsTutorialActive)
-                    {
-                        rightTutorialDone = true;
-                        TutorialUIManager.Instance.OnRightTutorialCompleted();
-                    }
-                }
-            }
-
-            if (touch.phase == TouchPhase.Ended ||
-                touch.phase == TouchPhase.Canceled)
-            {
-                dir = 0f;
-            }
+            transform.Rotate(0f, 0f, dir * rotateSpeed * Time.deltaTime);
         }
-
-        transform.Rotate(0f, 0f, dir * rotateSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
