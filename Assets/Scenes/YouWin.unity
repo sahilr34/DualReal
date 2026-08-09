@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b25f278fa7c1b41bf4954c2a449bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobileUploader
-  mobileInput: {fileID: 0}
+  mobileInput: {fileID: 1176629960}
   scriptURL: https://script.google.com/macros/s/AKfycbxRknu2JN_IXR8jBSERuN33hUkDOGwQMuj59qaIeTLPwTY-Z53_hnAbay4M2NUxVWTHaQ/exec
 --- !u!4 &568121280
 Transform:
