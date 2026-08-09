@@ -91,7 +91,7 @@ public class ScoreManager : MonoBehaviour
         if (allowWinCondition)
         {
             // हर बार Chase scene लोड होने पर नया random target score
-            targetScore = Random.Range(8, 15); // 50-100 के बीच random
+            targetScore = Random.Range(90, 150); // 50-100 के बीच random
         }
 
         UpdateScoreText();
