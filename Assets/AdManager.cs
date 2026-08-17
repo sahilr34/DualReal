@@ -1,78 +1,76 @@
 ﻿using UnityEngine;
-using UnityEngine.Advertisements;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using Unity.Services.LevelPlay;
 using System;
+using System.Collections;
 
-public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
+public class AdManager : MonoBehaviour
 {
-    [Header("Ad Settings")]
-    public string androidGameId = "5982831";
-    public string iosGameId = "5982830";
-    public string androidInterstitialAdUnitId = "Interstitial_Android";
-    public string iosInterstitialAdUnitId = "Interstitial_iOS";
-    public string androidRewardedAdUnitId = "Rewarded_Android";
-    public string iosRewardedAdUnitId = "Rewarded_iOS";
-    public string androidBannerAdUnitId = "Banner_Android";
-    public string iosBannerAdUnitId = "Banner_iOS";
-    public bool testMode = true;
+    [Header("LevelPlay Settings")]
+    [SerializeField] private string appKey = "27a506cdd";
+
+    [Header("LevelPlay Ad Unit IDs")]
+    [SerializeField] private string rewardedAdUnitId = "gdo3fqyhgjr788ct";
+    [SerializeField] private string interstitialAdUnitId = "o0qe79c61x30mbdl";
+    [SerializeField] private string bannerAdUnitId = "mzb0i9zi6p59dzvz";
 
     [Header("Ad Frequency")]
-    [Tooltip("Chance to show ad on restart (0-1)")]
     [Range(0f, 1f)]
-    public float adChanceOnRestart = 0f; // Set to 0 to disable restart ads
-    [Tooltip("Minimum time between ads in seconds")]
+    public float adChanceOnRestart = 0f;
+
     public float minTimeBetweenAds = 60f;
 
     [Header("Banner Settings")]
-    [Tooltip("Show banner on main menu")]
     public bool showBannerOnMainMenu = true;
-    [Tooltip("Show banner on game over")]
     public bool showBannerOnGameOver = true;
-    [Tooltip("Show banner on level scenes")]
     public bool showBannerOnLevels = true;
-    [Tooltip("Banner position")]
-    public BannerPosition bannerPosition = BannerPosition.BOTTOM_CENTER;
 
     public static AdManager Instance;
 
     private bool isInitialized = false;
-    private bool isInterstitialAdLoaded = false;
-    private bool isRewardedAdLoaded = false;
     private bool isAdShowing = false;
 
-    private float lastAdTime = 0f;
-    private bool shouldShowAdOnRestart = false;
+    private bool isInterstitialAdLoaded = false;
+    private bool isRewardedAdLoaded = false;
+    private bool isBannerLoaded = false;
+    private bool isBannerShowing = false;
+    private bool isLoadingBanner = false;
 
+    private float lastAdTime = 0f;
+
+    private bool shouldShowAdOnRestart = false;
     private Action restartCallback;
     private string targetSceneName = "";
 
-    // Banner related
-    private bool isBannerLoaded = false;
-    private bool isBannerShowing = false;
     private string currentSceneName = "";
-    private Coroutine bannerRetryCoroutine;
     private bool bannerShouldBeVisible = true;
-    private bool isLoadingBanner = false;
 
-    // Events
-    public System.Action OnAdCompleted;
-    public System.Action OnRewardEarned;
+    private Coroutine bannerRetryCoroutine;
+
+    // LevelPlay ad objects
+    private LevelPlayRewardedAd rewardedAd;
+    private LevelPlayInterstitialAd interstitialAd;
+    private LevelPlayBannerAd bannerAd;
+
+    // Existing events - ReviveManager ke liye same rakhe hain
+    public Action OnAdCompleted;
+    public Action OnRewardEarned;
+
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+
             DontDestroyOnLoad(gameObject);
 
-            // Force ad chance to 0 (no ads on restart)
+            // Restart ads disabled
             adChanceOnRestart = 0f;
 
-            InitializeAds();
-
-            // Scene change ko track karein
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            InitializeLevelPlay();
         }
         else
         {
@@ -80,66 +78,156 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
         }
     }
 
+
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        LevelPlay.OnInitSuccess -= OnLevelPlayInitSuccess;
+        LevelPlay.OnInitFailed -= OnLevelPlayInitFailed;
+
         if (bannerRetryCoroutine != null)
+        {
             StopCoroutine(bannerRetryCoroutine);
+        }
+
+        if (bannerAd != null)
+        {
+            bannerAd.DestroyAd();
+        }
+
+        if (interstitialAd != null)
+        {
+            interstitialAd.DestroyAd();
+        }
     }
+
+
+    // =========================================================
+    // LEVELPLAY INITIALIZATION
+    // =========================================================
+
+    private void InitializeLevelPlay()
+    {
+        Debug.Log("Initializing LevelPlay...");
+
+        // Temporary: enable LevelPlay Integration Test Suite for Android testing.
+        LevelPlay.SetMetaData("is_test_suite", "enable");
+
+        LevelPlay.OnInitSuccess += OnLevelPlayInitSuccess;
+        LevelPlay.OnInitFailed += OnLevelPlayInitFailed;
+
+        LevelPlay.Init(appKey);
+    }
+
+
+    private void OnLevelPlayInitSuccess(LevelPlayConfiguration configuration)
+    {
+        Debug.Log("LevelPlay initialized successfully.");
+
+        isInitialized = true;
+
+        // Temporary: launch LevelPlay Integration Test Suite on the Android device.
+        LevelPlay.LaunchTestSuite();
+
+        CreateRewardedAd();
+        CreateInterstitialAd();
+        CreateBannerAd();
+
+        LoadRewardedAd();
+        LoadInterstitialAd();
+        LoadBannerAd();
+    }
+
+
+    private void OnLevelPlayInitFailed(LevelPlayInitError error)
+    {
+        Debug.LogError("LevelPlay initialization failed: " + error);
+
+        isInitialized = false;
+
+        StartCoroutine(RetryInitialization());
+    }
+
+
+    private IEnumerator RetryInitialization()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+
+        if (!isInitialized)
+        {
+            InitializeLevelPlay();
+        }
+    }
+
+
+    // =========================================================
+    // SCENE
+    // =========================================================
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentSceneName = scene.name;
-        Debug.Log($"Scene Loaded: {currentSceneName}");
 
-        // Scene load hone par audio unpause karein
+        Debug.Log("Scene Loaded: " + currentSceneName);
+
         AudioListener.pause = false;
 
-        // Restart callback execute karein (scene load ke baad)
+        // Restart callback
         if (shouldShowAdOnRestart && restartCallback != null)
         {
             restartCallback.Invoke();
+
             restartCallback = null;
             shouldShowAdOnRestart = false;
         }
 
-        // Scene ke hisaab se banner handle karein
         UpdateBannerVisibilityForScene(scene.name);
     }
 
+
     private void UpdateBannerVisibilityForScene(string sceneName)
     {
-        // Check if banner should be shown in this scene
         bool shouldShowBanner = false;
 
-        // Main Menu scenes
         if (sceneName == "Mainmenu" || sceneName == "MainMenu")
         {
             shouldShowBanner = showBannerOnMainMenu;
         }
-        // Game Over scenes
-        else if (sceneName == "Gameover" || sceneName == "GameOver" || sceneName == "Game Over")
+        else if (
+            sceneName == "Gameover" ||
+            sceneName == "GameOver" ||
+            sceneName == "Game Over")
         {
             shouldShowBanner = showBannerOnGameOver;
         }
-        // Level scenes - ADDED "Level1" support
-        else if (sceneName == "Level" || sceneName == "Level1" || sceneName == "Level_1" ||
-                 sceneName == "Level2" || sceneName == "Level_2" || sceneName == "Level3" || sceneName == "Level_3" ||
-                 sceneName.StartsWith("Level"))
+        else if (
+            sceneName == "Level" ||
+            sceneName == "Level1" ||
+            sceneName == "Level_1" ||
+            sceneName == "Level2" ||
+            sceneName == "Level_2" ||
+            sceneName == "Level3" ||
+            sceneName == "Level_3" ||
+            sceneName.StartsWith("Level"))
         {
             shouldShowBanner = showBannerOnLevels;
         }
-        // Win scenes
-        else if (sceneName == "Youwin" || sceneName == "YouWin" || sceneName == "You Win")
+        else if (
+            sceneName == "Youwin" ||
+            sceneName == "YouWin" ||
+            sceneName == "You Win")
         {
             shouldShowBanner = true;
         }
 
         bannerShouldBeVisible = shouldShowBanner;
 
+        if (!isInitialized || bannerAd == null)
+            return;
+
         if (shouldShowBanner)
         {
-            // Banner should be visible - show it
             if (isBannerLoaded && !isBannerShowing)
             {
                 ShowBannerAd();
@@ -151,7 +239,6 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
         }
         else
         {
-            // Banner should be hidden - hide it but don't destroy
             if (isBannerShowing)
             {
                 HideBannerAd();
@@ -159,418 +246,572 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
         }
     }
 
-    public void OnInitializationComplete()
+
+    // =========================================================
+    // REWARDED AD
+    // =========================================================
+
+    private void CreateRewardedAd()
     {
-        Debug.Log("✅ Unity Ads initialized successfully");
-        isInitialized = true;
-        LoadAllAds();
-
-        // Load banner ad once for continuous use
-        LoadBannerAd();
-    }
-
-    public void OnInitializationFailed(UnityAdsInitializationError error, string message)
-    {
-        Debug.LogError($"❌ Unity Ads Initialization Failed: {error} - {message}");
-        StartCoroutine(RetryInitialization(5f));
-    }
-
-    private IEnumerator RetryInitialization(float delay)
-    {
-        yield return new WaitForSecondsRealtime(delay);
-        InitializeAds();
-    }
-
-    private void InitializeAds()
-    {
-        if (!Advertisement.isInitialized && !isInitialized)
-        {
-            Debug.Log("Initializing Unity Ads...");
-
-#if UNITY_IOS
-            string gameId = iosGameId;
-#elif UNITY_ANDROID
-            string gameId = androidGameId;
-#else
-            string gameId = androidGameId;
-#endif
-
-            Advertisement.Initialize(gameId, testMode, this);
-        }
-        else if (Advertisement.isInitialized)
-        {
-            isInitialized = true;
-            LoadAllAds();
-        }
-    }
-
-    private void LoadAllAds()
-    {
-        LoadInterstitialAd();
-        LoadRewardedAd();
-    }
-
-    private string GetInterstitialAdUnitId()
-    {
-#if UNITY_IOS
-        return iosInterstitialAdUnitId;
-#else
-        return androidInterstitialAdUnitId;
-#endif
-    }
-
-    private string GetRewardedAdUnitId()
-    {
-#if UNITY_IOS
-        return iosRewardedAdUnitId;
-#else
-        return androidRewardedAdUnitId;
-#endif
-    }
-
-    private string GetBannerAdUnitId()
-    {
-#if UNITY_IOS
-        return iosBannerAdUnitId;
-#else
-        return androidBannerAdUnitId;
-#endif
-    }
-
-    // ---------- Banner Ads - Persistent ----------
-    public void LoadBannerAd()
-    {
-        if (!isInitialized)
-        {
-            Debug.Log("Ads not initialized yet.");
+        if (rewardedAd != null)
             return;
-        }
 
-        if (isBannerLoaded)
-        {
-            Debug.Log("Banner already loaded");
-            if (bannerShouldBeVisible && !isBannerShowing)
-            {
-                ShowBannerAd();
-            }
-            return;
-        }
+        rewardedAd = new LevelPlayRewardedAd(rewardedAdUnitId);
 
-        if (isLoadingBanner)
-        {
-            Debug.Log("Banner is already loading");
-            return;
-        }
-
-        string bannerAdUnitId = GetBannerAdUnitId();
-        Debug.Log($"Loading Banner Ad: {bannerAdUnitId}");
-
-        isLoadingBanner = true;
-
-        // Stop any existing retry coroutine
-        if (bannerRetryCoroutine != null)
-        {
-            StopCoroutine(bannerRetryCoroutine);
-            bannerRetryCoroutine = null;
-        }
-
-        // Set banner position
-        Advertisement.Banner.SetPosition(bannerPosition);
-
-        // Load banner
-        Advertisement.Banner.Load(bannerAdUnitId, new BannerLoadOptions
-        {
-            loadCallback = () => {
-                Debug.Log("✅ Banner Ad Loaded Successfully!");
-                isBannerLoaded = true;
-                isLoadingBanner = false;
-
-                if (bannerShouldBeVisible)
-                {
-                    ShowBannerAd();
-                }
-            },
-            errorCallback = (error) => {
-                Debug.LogError($"❌ Banner Ad Failed to Load: {error}");
-                isBannerLoaded = false;
-                isLoadingBanner = false;
-
-                // Retry loading after delay
-                bannerRetryCoroutine = StartCoroutine(RetryLoadBanner());
-            }
-        });
+        rewardedAd.OnAdLoaded += RewardedOnAdLoaded;
+        rewardedAd.OnAdLoadFailed += RewardedOnAdLoadFailed;
+        rewardedAd.OnAdDisplayed += RewardedOnAdDisplayed;
+        rewardedAd.OnAdDisplayFailed += RewardedOnAdDisplayFailed;
+        rewardedAd.OnAdRewarded += RewardedOnAdRewarded;
+        rewardedAd.OnAdClosed += RewardedOnAdClosed;
+        rewardedAd.OnAdClicked += RewardedOnAdClicked;
     }
 
-    private IEnumerator RetryLoadBanner()
-    {
-        yield return new WaitForSecondsRealtime(5f);
-        if (!isBannerLoaded && isInitialized && bannerShouldBeVisible)
-        {
-            Debug.Log("Retrying to load banner...");
-            LoadBannerAd();
-        }
-    }
 
-    public void ShowBannerAd()
-    {
-        if (!isInitialized)
-        {
-            Debug.Log("Ads not initialized yet.");
-            return;
-        }
-
-        if (!bannerShouldBeVisible)
-        {
-            Debug.Log("Banner should not be visible in current scene");
-            return;
-        }
-
-        if (!isBannerLoaded)
-        {
-            Debug.Log("Banner not loaded yet. Loading now...");
-            LoadBannerAd();
-            return;
-        }
-
-        if (isBannerShowing)
-        {
-            Debug.Log("Banner already showing");
-            return;
-        }
-
-        string bannerAdUnitId = GetBannerAdUnitId();
-        Debug.Log($"Showing Banner Ad: {bannerAdUnitId}");
-
-        Advertisement.Banner.Show(bannerAdUnitId, new BannerOptions
-        {
-            showCallback = () => {
-                Debug.Log("✅ Banner Ad Shown");
-                isBannerShowing = true;
-            },
-            hideCallback = () => {
-                Debug.Log("📱 Banner Ad Hidden");
-                isBannerShowing = false;
-            },
-            clickCallback = () => {
-                Debug.Log("🔗 Banner Ad Clicked");
-            }
-        });
-    }
-
-    public void HideBannerAd()
-    {
-        if (isBannerShowing)
-        {
-            Debug.Log("Hiding Banner Ad");
-            Advertisement.Banner.Hide();
-            isBannerShowing = false;
-        }
-    }
-
-    public void DestroyBannerAd()
-    {
-        Debug.Log("Destroying Banner Ad");
-        Advertisement.Banner.Hide();
-        isBannerLoaded = false;
-        isBannerShowing = false;
-        bannerShouldBeVisible = false;
-
-        if (bannerRetryCoroutine != null)
-        {
-            StopCoroutine(bannerRetryCoroutine);
-            bannerRetryCoroutine = null;
-        }
-    }
-
-    // ---------- Interstitial Ads ----------
-    private void LoadInterstitialAd()
-    {
-        if (!isInitialized) return;
-
-        string adUnitId = GetInterstitialAdUnitId();
-        Debug.Log($"Loading Interstitial Ad: {adUnitId}");
-        Advertisement.Load(adUnitId, this);
-    }
-
-    public void ShowInterstitialAd()
-    {
-        if (!isInitialized || !isInterstitialAdLoaded || isAdShowing)
-        {
-            if (shouldShowAdOnRestart && restartCallback != null)
-            {
-                restartCallback.Invoke();
-                restartCallback = null;
-            }
-            OnAdCompleted?.Invoke();
-            shouldShowAdOnRestart = false;
-            return;
-        }
-
-        string adUnitId = GetInterstitialAdUnitId();
-        isAdShowing = true;
-
-        // Hide banner temporarily when interstitial shows
-        if (isBannerShowing)
-        {
-            Advertisement.Banner.Hide();
-        }
-
-        Time.timeScale = 0f;
-        AudioListener.pause = true;
-        Advertisement.Show(adUnitId, this);
-    }
-
-    // ---------- Rewarded Ads ----------
     private void LoadRewardedAd()
     {
-        if (!isInitialized) return;
+        if (!isInitialized || rewardedAd == null)
+            return;
 
-        string adUnitId = GetRewardedAdUnitId();
-        Debug.Log($"Loading Rewarded Ad: {adUnitId}");
-        Advertisement.Load(adUnitId, this);
+        Debug.Log("Loading LevelPlay Rewarded Ad...");
+
+        isRewardedAdLoaded = false;
+
+        rewardedAd.LoadAd();
     }
+
 
     public void ShowRewardedAd()
     {
-        if (isRewardedAdLoaded && !isAdShowing)
+        if (!isInitialized || rewardedAd == null)
         {
-            string adUnitId = GetRewardedAdUnitId();
-            isAdShowing = true;
-
-            // Hide banner temporarily when rewarded ad shows
-            if (isBannerShowing)
-            {
-                Advertisement.Banner.Hide();
-            }
-
-            Advertisement.Show(adUnitId, this);
+            Debug.LogWarning("LevelPlay is not initialized.");
+            return;
         }
-        else
+
+        if (isAdShowing)
         {
-            Debug.Log("Rewarded ad not ready yet.");
+            Debug.Log("Another ad is already showing.");
+            return;
+        }
+
+        if (!rewardedAd.IsAdReady())
+        {
+            Debug.Log("Rewarded ad is not ready yet.");
+            LoadRewardedAd();
+            return;
+        }
+
+        isAdShowing = true;
+
+        if (isBannerShowing)
+        {
+            HideBannerAd();
+        }
+
+        Debug.Log("Showing LevelPlay Rewarded Ad...");
+
+        rewardedAd.ShowAd();
+    }
+
+
+    private void RewardedOnAdLoaded(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Rewarded Ad Loaded.");
+
+        isRewardedAdLoaded = true;
+    }
+
+
+    private void RewardedOnAdLoadFailed(LevelPlayAdError error)
+    {
+        Debug.LogError("Rewarded Ad Load Failed: " + error);
+
+        isRewardedAdLoaded = false;
+
+        StartCoroutine(RetryRewardedAd());
+    }
+
+
+    private IEnumerator RetryRewardedAd()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+
+        if (isInitialized && !isRewardedAdLoaded)
+        {
             LoadRewardedAd();
         }
     }
 
-    // ---------- Unity Ads Callbacks ----------
-    public void OnUnityAdsAdLoaded(string adUnitId)
-    {
-        Debug.Log($"✅ Ad Loaded: {adUnitId}");
 
-        if (adUnitId == GetInterstitialAdUnitId()) isInterstitialAdLoaded = true;
-        if (adUnitId == GetRewardedAdUnitId()) isRewardedAdLoaded = true;
+    private void RewardedOnAdDisplayed(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Rewarded Ad Displayed.");
     }
 
-    public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
-    {
-        Debug.LogError($"❌ Failed to load Ad: {adUnitId}, Error: {error} - {message}");
 
-        if (adUnitId == GetInterstitialAdUnitId())
-        {
-            isInterstitialAdLoaded = false;
-            StartCoroutine(RetryLoadAd(5f, true));
-        }
-        if (adUnitId == GetRewardedAdUnitId())
-        {
-            isRewardedAdLoaded = false;
-            StartCoroutine(RetryLoadAd(5f, false));
-        }
-    }
-
-    private IEnumerator RetryLoadAd(float delay, bool isInterstitial)
+    private void RewardedOnAdDisplayFailed(
+        LevelPlayAdInfo adInfo,
+        LevelPlayAdError error)
     {
-        yield return new WaitForSeconds(delay);
-        if (isInterstitial) LoadInterstitialAd();
-        else LoadRewardedAd();
-    }
+        Debug.LogError("Rewarded Ad Display Failed: " + error);
 
-    public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
-    {
-        Debug.LogError($"❌ Show Failed: {adUnitId} - {error}: {message}");
         isAdShowing = false;
+
+        RestoreBanner();
+
+        LoadRewardedAd();
+    }
+
+
+    private void RewardedOnAdRewarded(
+        LevelPlayAdInfo adInfo,
+        LevelPlayReward reward)
+    {
+        Debug.Log(
+            "Reward received: " +
+            reward.Name +
+            " - " +
+            reward.Amount
+        );
+
+        // IMPORTANT:
+        // Ye tumhare existing ReviveManager ke
+        // OnRewardEarned event ko trigger karega.
+        OnRewardEarned?.Invoke();
+    }
+
+
+    private void RewardedOnAdClosed(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Rewarded Ad Closed.");
+
+        isAdShowing = false;
+        isRewardedAdLoaded = false;
+
+        RestoreBanner();
+
+        LoadRewardedAd();
+    }
+
+
+    private void RewardedOnAdClicked(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Rewarded Ad Clicked.");
+    }
+
+
+    // =========================================================
+    // INTERSTITIAL AD
+    // =========================================================
+
+    private void CreateInterstitialAd()
+    {
+        if (interstitialAd != null)
+            return;
+
+        interstitialAd =
+            new LevelPlayInterstitialAd(interstitialAdUnitId);
+
+        interstitialAd.OnAdLoaded += InterstitialOnAdLoaded;
+        interstitialAd.OnAdLoadFailed += InterstitialOnAdLoadFailed;
+        interstitialAd.OnAdDisplayed += InterstitialOnAdDisplayed;
+        interstitialAd.OnAdDisplayFailed += InterstitialOnAdDisplayFailed;
+        interstitialAd.OnAdClicked += InterstitialOnAdClicked;
+        interstitialAd.OnAdClosed += InterstitialOnAdClosed;
+    }
+
+
+    private void LoadInterstitialAd()
+    {
+        if (!isInitialized || interstitialAd == null)
+            return;
+
+        Debug.Log("Loading LevelPlay Interstitial Ad...");
+
+        isInterstitialAdLoaded = false;
+
+        interstitialAd.LoadAd();
+    }
+
+
+    public void ShowInterstitialAd()
+    {
+        if (!isInitialized ||
+            interstitialAd == null ||
+            isAdShowing)
+        {
+            CompleteRestartWithoutAd();
+            return;
+        }
+
+        if (!interstitialAd.IsAdReady())
+        {
+            Debug.Log("Interstitial ad is not ready.");
+
+            CompleteRestartWithoutAd();
+            LoadInterstitialAd();
+
+            return;
+        }
+
+        isAdShowing = true;
+
+        if (isBannerShowing)
+        {
+            HideBannerAd();
+        }
+
+        Time.timeScale = 0f;
+        AudioListener.pause = true;
+
+        Debug.Log("Showing LevelPlay Interstitial Ad...");
+
+        interstitialAd.ShowAd();
+    }
+
+
+    private void InterstitialOnAdLoaded(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Interstitial Ad Loaded.");
+
+        isInterstitialAdLoaded = true;
+    }
+
+
+    private void InterstitialOnAdLoadFailed(LevelPlayAdError error)
+    {
+        Debug.LogError("Interstitial Ad Load Failed: " + error);
+
+        isInterstitialAdLoaded = false;
+
+        StartCoroutine(RetryInterstitialAd());
+    }
+
+
+    private IEnumerator RetryInterstitialAd()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+
+        if (isInitialized && !isInterstitialAdLoaded)
+        {
+            LoadInterstitialAd();
+        }
+    }
+
+
+    private void InterstitialOnAdDisplayed(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Interstitial Ad Displayed.");
+    }
+
+
+    private void InterstitialOnAdDisplayFailed(
+        LevelPlayAdInfo adInfo,
+        LevelPlayAdError error)
+    {
+        Debug.LogError("Interstitial Display Failed: " + error);
+
+        isAdShowing = false;
+
         Time.timeScale = 1f;
         AudioListener.pause = false;
 
-        // Restore banner after ad failure
+        RestoreBanner();
+
+        CompleteRestartAfterAd();
+
+        LoadInterstitialAd();
+    }
+
+
+    private void InterstitialOnAdClicked(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Interstitial Ad Clicked.");
+    }
+
+
+    private void InterstitialOnAdClosed(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Interstitial Ad Closed.");
+
+        isAdShowing = false;
+        isInterstitialAdLoaded = false;
+
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+
+        lastAdTime = Time.unscaledTime;
+
+        RestoreBanner();
+
+        CompleteRestartAfterAd();
+
+        OnAdCompleted?.Invoke();
+
+        LoadInterstitialAd();
+    }
+
+
+    // =========================================================
+    // BANNER AD
+    // =========================================================
+
+    private void CreateBannerAd()
+    {
+        if (bannerAd != null)
+            return;
+
+        var configBuilder =
+            new LevelPlayBannerAd.Config.Builder();
+
+        configBuilder.SetPosition(
+            LevelPlayBannerPosition.BottomCenter
+        );
+
+        configBuilder.SetDisplayOnLoad(false);
+
+        var bannerConfig = configBuilder.Build();
+
+        bannerAd =
+            new LevelPlayBannerAd(
+                bannerAdUnitId,
+                bannerConfig
+            );
+
+        bannerAd.OnAdLoaded += BannerOnAdLoaded;
+        bannerAd.OnAdLoadFailed += BannerOnAdLoadFailed;
+        bannerAd.OnAdDisplayed += BannerOnAdDisplayed;
+        bannerAd.OnAdDisplayFailed += BannerOnAdDisplayFailed;
+        bannerAd.OnAdClicked += BannerOnAdClicked;
+    }
+
+
+    public void LoadBannerAd()
+    {
+        if (!isInitialized || bannerAd == null)
+            return;
+
+        if (isBannerLoaded)
+        {
+            if (bannerShouldBeVisible && !isBannerShowing)
+            {
+                ShowBannerAd();
+            }
+
+            return;
+        }
+
+        if (isLoadingBanner)
+            return;
+
+        isLoadingBanner = true;
+
+        Debug.Log("Loading LevelPlay Banner Ad...");
+
+        bannerAd.LoadAd();
+    }
+
+
+    private void BannerOnAdLoaded(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Banner Ad Loaded.");
+
+        isBannerLoaded = true;
+        isLoadingBanner = false;
+
+        if (bannerShouldBeVisible)
+        {
+            ShowBannerAd();
+        }
+    }
+
+
+    private void BannerOnAdLoadFailed(LevelPlayAdError error)
+    {
+        Debug.LogError("Banner Ad Load Failed: " + error);
+
+        isBannerLoaded = false;
+        isLoadingBanner = false;
+
+        if (bannerRetryCoroutine != null)
+        {
+            StopCoroutine(bannerRetryCoroutine);
+        }
+
+        bannerRetryCoroutine =
+            StartCoroutine(RetryLoadBanner());
+    }
+
+
+    private IEnumerator RetryLoadBanner()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+
+        if (isInitialized &&
+            !isBannerLoaded &&
+            bannerShouldBeVisible)
+        {
+            LoadBannerAd();
+        }
+    }
+
+
+    public void ShowBannerAd()
+    {
+        if (!isInitialized || bannerAd == null)
+            return;
+
+        if (!bannerShouldBeVisible)
+            return;
+
+        if (!isBannerLoaded)
+        {
+            LoadBannerAd();
+            return;
+        }
+
+        if (isBannerShowing)
+            return;
+
+        Debug.Log("Showing LevelPlay Banner Ad...");
+
+        bannerAd.ShowAd();
+
+        isBannerShowing = true;
+    }
+
+
+    public void HideBannerAd()
+    {
+        if (bannerAd == null)
+            return;
+
+        Debug.Log("Hiding LevelPlay Banner Ad...");
+
+        bannerAd.HideAd();
+
+        isBannerShowing = false;
+    }
+
+
+    public void DestroyBannerAd()
+    {
+        if (bannerAd == null)
+            return;
+
+        Debug.Log("Destroying LevelPlay Banner Ad...");
+
+        bannerAd.DestroyAd();
+
+        bannerAd = null;
+
+        isBannerLoaded = false;
+        isBannerShowing = false;
+        isLoadingBanner = false;
+    }
+
+
+    private void BannerOnAdDisplayed(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Banner Ad Displayed.");
+
+        isBannerShowing = true;
+    }
+
+
+    private void BannerOnAdDisplayFailed(
+        LevelPlayAdInfo adInfo,
+        LevelPlayAdError error)
+    {
+        Debug.LogError("Banner Display Failed: " + error);
+
+        isBannerShowing = false;
+    }
+
+
+    private void BannerOnAdClicked(LevelPlayAdInfo adInfo)
+    {
+        Debug.Log("Banner Ad Clicked.");
+    }
+
+
+    private void RestoreBanner()
+    {
         if (bannerShouldBeVisible && isBannerLoaded)
         {
             ShowBannerAd();
         }
-
-        if (shouldShowAdOnRestart && restartCallback != null)
-        {
-            restartCallback.Invoke();
-            restartCallback = null;
-        }
-        shouldShowAdOnRestart = false;
-
-        LoadAllAds();
     }
 
-    public void OnUnityAdsShowStart(string adUnitId)
-    {
-        Debug.Log($"▶️ Ad Started: {adUnitId}");
-    }
 
-    public void OnUnityAdsShowClick(string adUnitId)
-    {
-        Debug.Log($"🔗 Ad Clicked: {adUnitId}");
-    }
+    // =========================================================
+    // RESTART SYSTEM
+    // =========================================================
 
-    public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
-    {
-        Debug.Log($"✅ Ad Completed: {adUnitId}, State: {showCompletionState}");
-
-        isAdShowing = false;
-        Time.timeScale = 1f;
-        AudioListener.pause = false;
-
-        // Restore banner after ad completes
-        if (bannerShouldBeVisible && isBannerLoaded)
-        {
-            ShowBannerAd();
-        }
-
-        if (adUnitId == GetRewardedAdUnitId() && showCompletionState == UnityAdsShowCompletionState.COMPLETED)
-        {
-            Debug.Log("🎁 Player earned reward!");
-            OnRewardEarned?.Invoke();
-        }
-        else if (adUnitId == GetInterstitialAdUnitId())
-        {
-            lastAdTime = Time.unscaledTime;
-            OnAdCompleted?.Invoke();
-        }
-
-        LoadAllAds();
-    }
-
-    // Restart ke liye method
-    public void RequestRestartWithAd(Action callback, string sceneName = "")
+    public void RequestRestartWithAd(
+        Action callback,
+        string sceneName = "")
     {
         restartCallback = callback;
         targetSceneName = sceneName;
 
-        float timeSinceLastAd = Time.unscaledTime - lastAdTime;
+        float timeSinceLastAd =
+            Time.unscaledTime - lastAdTime;
 
         if (timeSinceLastAd >= minTimeBetweenAds)
         {
-            float randomValue = UnityEngine.Random.Range(0f, 1f);
-            if (randomValue <= adChanceOnRestart && isInterstitialAdLoaded)
+            float randomValue =
+                UnityEngine.Random.Range(0f, 1f);
+
+            if (randomValue <= adChanceOnRestart &&
+                isInterstitialAdLoaded)
             {
                 shouldShowAdOnRestart = true;
+
                 ShowInterstitialAd();
+
                 return;
             }
         }
 
         OnAdCompleted?.Invoke();
+
         shouldShowAdOnRestart = false;
+
         callback?.Invoke();
     }
+
 
     public void RequestRestartWithAd(Action callback)
     {
         RequestRestartWithAd(callback, "");
+    }
+
+
+    private void CompleteRestartAfterAd()
+    {
+        if (shouldShowAdOnRestart &&
+            restartCallback != null)
+        {
+            restartCallback.Invoke();
+
+            restartCallback = null;
+            shouldShowAdOnRestart = false;
+        }
+    }
+
+
+    private void CompleteRestartWithoutAd()
+    {
+        shouldShowAdOnRestart = false;
+
+        if (restartCallback != null)
+        {
+            restartCallback.Invoke();
+            restartCallback = null;
+        }
+
+        OnAdCompleted?.Invoke();
     }
 }
