@@ -602,21 +602,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7dd57ba4dcf5241a98256db45e7adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  androidGameId: 5983821
-  iosGameId: 5983820
-  androidInterstitialAdUnitId: Interstitial_Android
-  iosInterstitialAdUnitId: Interstitial_iOS
-  androidRewardedAdUnitId: Rewarded_Android
-  iosRewardedAdUnitId: Rewarded_iOS
-  androidBannerAdUnitId: Banner_Android
-  iosBannerAdUnitId: Banner_iOS
-  testMode: 0
+  androidAppId: ca-app-pub-9156600449659789~8033456119
+  admobRewardedAdUnitId: ca-app-pub-9156600449659789/4005068429
+  admobInterstitialAdUnitId: ca-app-pub-9156600449659789/2712951877
+  admobBannerAdUnitId: ca-app-pub-9156600449659789/9169765195
   adChanceOnRestart: 0.5
   minTimeBetweenAds: 2
   showBannerOnMainMenu: 1
   showBannerOnGameOver: 1
   showBannerOnLevels: 1
-  bannerPosition: 4
+  bannerRefreshInterval: 30
+  useTestAds: 1
 --- !u!4 &608811918 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2148412142962102433, guid: 57970c6bb711ec24b8d98424b1806f3b, type: 3}

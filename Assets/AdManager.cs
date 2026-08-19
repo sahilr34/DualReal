@@ -8,12 +8,12 @@ using System.Collections;
 public class AdManager : MonoBehaviour
 {
     [Header("AdMob App IDs")]
-    [SerializeField] private string androidAppId = "ca-app-pub-9526502553419115~2160977056";
+    [SerializeField] private string androidAppId = "ca-app-pub-9156600449659789~8033456119";
 
     [Header("AdMob Ad Unit IDs (Android)")]
-    [SerializeField] private string admobRewardedAdUnitId = "ca-app-pub-9526502553419115/9598086123";
-    [SerializeField] private string admobInterstitialAdUnitId = "ca-app-pub-9526502553419115/5343196677";
-    [SerializeField] private string admobBannerAdUnitId = "ca-app-pub-9526502553419115/2046899165";
+    [SerializeField] private string admobRewardedAdUnitId = "ca-app-pub-9156600449659789/4005068429";
+    [SerializeField] private string admobInterstitialAdUnitId = "ca-app-pub-9156600449659789/2712951877";
+    [SerializeField] private string admobBannerAdUnitId = "ca-app-pub-9156600449659789/9169765195";
 
     [Header("Ad Frequency")]
     [Range(0f, 1f)]
@@ -30,7 +30,7 @@ public class AdManager : MonoBehaviour
 
     [Header("Test Mode")]
     [Tooltip("Use test ads (recommended during development)")]
-    public bool useTestAds = true;
+    public bool useTestAds = false;
 
     public static AdManager Instance;
 
@@ -201,7 +201,7 @@ public class AdManager : MonoBehaviour
     }
 
     // =========================================================
-    // LOAD REWARDED AD - FIXED
+    // LOAD REWARDED AD
     // =========================================================
 
     private void LoadAdMobRewardedAd()
@@ -470,7 +470,7 @@ public class AdManager : MonoBehaviour
     }
 
     // =========================================================
-    // SHOW REWARDED AD - FIXED
+    // SHOW REWARDED AD
     // =========================================================
 
     public void ShowRewardedAd()
@@ -484,7 +484,6 @@ public class AdManager : MonoBehaviour
         if (isAdShowing)
         {
             Debug.LogWarning("⚠️ Another ad is showing. Waiting...");
-            // Try again after a short delay
             StartCoroutine(RetryShowRewardedAd());
             return;
         }
@@ -502,14 +501,12 @@ public class AdManager : MonoBehaviour
             
             if (isBannerShowing) HideBannerAd();
             
-            // Store reward callback
             admobRewardedAd.Show((reward) =>
             {
                 Debug.Log($"🎁 Reward Earned: {reward.Type} - {reward.Amount}");
                 isRewardClaimed = true;
                 OnRewardEarned?.Invoke();
                 
-                // Auto-reset after 2 seconds
                 StartCoroutine(AutoResetRewardClaim());
             });
             return;
@@ -524,14 +521,12 @@ public class AdManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         
-        // Reset isAdShowing if it's stuck
         if (isAdShowing)
         {
             Debug.Log("🔄 Resetting stuck ad showing state...");
             isAdShowing = false;
         }
         
-        // Try to show again
         if (isRewardedAdLoaded && !isRewardClaimed)
         {
             ShowRewardedAd();
@@ -553,13 +548,13 @@ public class AdManager : MonoBehaviour
     }
 
     // =========================================================
-    // RESET REWARD CLAIM - FIXED
+    // RESET REWARD CLAIM
     // =========================================================
 
     public void ResetRewardClaim()
     {
         isRewardClaimed = false;
-        isAdShowing = false; // Reset stuck state
+        isAdShowing = false;
         Debug.Log("🔄 Reward claim reset. Revive available again.");
         
         LoadAdMobRewardedAd();
@@ -691,7 +686,6 @@ public class AdManager : MonoBehaviour
             shouldShowAdOnRestart = false;
         }
 
-        // Reset ad showing state on scene load
         isAdShowing = false;
 
         if (isInitialized)
@@ -810,7 +804,6 @@ public class AdManager : MonoBehaviour
         ResetRewardClaim();
     }
 
-    // Emergency reset for stuck ad state
     public void ForceResetAdState()
     {
         isAdShowing = false;
