@@ -956,21 +956,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7dd57ba4dcf5241a98256db45e7adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdManager
-  androidGameId: 5983821
-  iosGameId: 5983820
-  androidInterstitialAdUnitId: Interstitial_Android
-  iosInterstitialAdUnitId: Interstitial_iOS
-  androidRewardedAdUnitId: Rewarded_Android
-  iosRewardedAdUnitId: Rewarded_iOS
-  androidBannerAdUnitId: Banner_Android
-  iosBannerAdUnitId: Banner_iOS
-  testMode: 0
+  androidAppId: ca-app-pub-9526502553419115~2160977056
+  admobRewardedAdUnitId: ca-app-pub-9526502553419115/9598086123
+  admobInterstitialAdUnitId: ca-app-pub-9526502553419115/5343196677
+  admobBannerAdUnitId: ca-app-pub-9526502553419115/2046899165
   adChanceOnRestart: 0.5
   minTimeBetweenAds: 2
   showBannerOnMainMenu: 1
   showBannerOnGameOver: 1
   showBannerOnLevels: 1
-  bannerPosition: 4
+  bannerRefreshInterval: 30
+  useTestAds: 1
 --- !u!82 &547778756
 AudioSource:
   m_ObjectHideFlags: 0
