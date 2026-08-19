@@ -1,0 +1,637 @@
+fileFormatVersion: 2
+guid: f7707bc5a32a90a4995827cc1c8f169a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7517067440522261106
+    second: PaymentSecure_0
+  - first:
+      213: -3354383619742851083
+    second: PaymentSecure_1
+  - first:
+      213: 5937892159851940807
+    second: PaymentSecure_2
+  - first:
+      213: 4430121064751469197
+    second: PaymentSecure_3
+  - first:
+      213: -8567791627806660512
+    second: PaymentSecure_4
+  - first:
+      213: 2309307650121916529
+    second: PaymentSecure_5
+  - first:
+      213: -3587626355741698966
+    second: PaymentSecure_6
+  - first:
+      213: 7249580681075029196
+    second: PaymentSecure_7
+  - first:
+      213: 3123958970396029090
+    second: PaymentSecure_8
+  - first:
+      213: -6907989924321002986
+    second: PaymentSecure_9
+  - first:
+      213: 580151309935744789
+    second: PaymentSecure_10
+  - first:
+      213: 4178372165525089562
+    second: PaymentSecure_11
+  - first:
+      213: -7488266568752129127
+    second: PaymentSecure_12
+  - first:
+      213: -419358908546943655
+    second: PaymentSecure_13
+  - first:
+      213: -5427274846412397401
+    second: PaymentSecure_14
+  - first:
+      213: 2628041087188749353
+    second: PaymentSecure_15
+  - first:
+      213: -1913023448722966771
+    second: PaymentSecure_16
+  - first:
+      213: 1033105054300209036
+    second: PaymentSecure_17
+  - first:
+      213: 1807201265339502391
+    second: PaymentSecure_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PaymentSecure_0
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 11
+        width: 182
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8d040f6df20ea790800000000000000
+      internalID: -7517067440522261106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_1
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 80
+        width: 114
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ff96d0ced5d271d0800000000000000
+      internalID: -3354383619742851083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_2
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 97
+        width: 49
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cb4d868571a76250800000000000000
+      internalID: 5937892159851940807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_3
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 92
+        width: 53
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d829c78f2a3fa7d30800000000000000
+      internalID: 4430121064751469197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_4
+      rect:
+        serializedVersion: 2
+        x: 589
+        y: 88
+        width: 108
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 068a40b98e6191980800000000000000
+      internalID: -8567791627806660512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_5
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 74
+        width: 157
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 170eb92921f4c0020800000000000000
+      internalID: 2309307650121916529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_6
+      rect:
+        serializedVersion: 2
+        x: 893
+        y: 89
+        width: 124
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a64df2766d0363ec0800000000000000
+      internalID: -3587626355741698966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_7
+      rect:
+        serializedVersion: 2
+        x: 1022
+        y: 92
+        width: 111
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc4f202383fab9460800000000000000
+      internalID: 7249580681075029196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_8
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 97
+        width: 32
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a0b953d1288a5b20800000000000000
+      internalID: 3123958970396029090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_9
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 89
+        width: 65
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61a7ed093c3e120a0800000000000000
+      internalID: -6907989924321002986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_10
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 80
+        width: 326
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51792b8ea8c1d0800800000000000000
+      internalID: 580151309935744789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_11
+      rect:
+        serializedVersion: 2
+        x: 1646
+        y: 88
+        width: 54
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1da089b85f8cf930800000000000000
+      internalID: 4178372165525089562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_12
+      rect:
+        serializedVersion: 2
+        x: 1735
+        y: 96
+        width: 108
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99b9812fa35541890800000000000000
+      internalID: -7488266568752129127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_13
+      rect:
+        serializedVersion: 2
+        x: 1842
+        y: 94
+        width: 55
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 955f9a66b432e2af0800000000000000
+      internalID: -419358908546943655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_14
+      rect:
+        serializedVersion: 2
+        x: 1888
+        y: 89
+        width: 55
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a42d2938427ea4b0800000000000000
+      internalID: -5427274846412397401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_15
+      rect:
+        serializedVersion: 2
+        x: 1981
+        y: 119
+        width: 124
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92c4401e17da87420800000000000000
+      internalID: 2628041087188749353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_16
+      rect:
+        serializedVersion: 2
+        x: 1128
+        y: 108
+        width: 17
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d07ffdb1f439375e0800000000000000
+      internalID: -1913023448722966771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_17
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 91
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8f7931c293565e00800000000000000
+      internalID: 1033105054300209036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PaymentSecure_18
+      rect:
+        serializedVersion: 2
+        x: 1752
+        y: 88
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73f8232d9f7741910800000000000000
+      internalID: 1807201265339502391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      PaymentSecure_0: -7517067440522261106
+      PaymentSecure_1: -3354383619742851083
+      PaymentSecure_10: 580151309935744789
+      PaymentSecure_11: 4178372165525089562
+      PaymentSecure_12: -7488266568752129127
+      PaymentSecure_13: -419358908546943655
+      PaymentSecure_14: -5427274846412397401
+      PaymentSecure_15: 2628041087188749353
+      PaymentSecure_16: -1913023448722966771
+      PaymentSecure_17: 1033105054300209036
+      PaymentSecure_18: 1807201265339502391
+      PaymentSecure_2: 5937892159851940807
+      PaymentSecure_3: 4430121064751469197
+      PaymentSecure_4: -8567791627806660512
+      PaymentSecure_5: 2309307650121916529
+      PaymentSecure_6: -3587626355741698966
+      PaymentSecure_7: 7249580681075029196
+      PaymentSecure_8: 3123958970396029090
+      PaymentSecure_9: -6907989924321002986
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
