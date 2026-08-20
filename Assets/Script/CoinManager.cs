@@ -10,6 +10,7 @@ public class CoinManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TMP_Text coinText;
+    [SerializeField] private TMP_Text withdrawPanelBalanceText;
 
     private const string COIN_KEY = "PlayerCoins";
 
@@ -148,6 +149,7 @@ public class CoinManager : MonoBehaviour
         }
 
         coinText.text =": "+ currentCoins.ToString();
+        withdrawPanelBalanceText.text= currentCoins.ToString();
 
         Debug.Log(
             $"Coin UI updated: {coinText.text}"

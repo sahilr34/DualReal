@@ -119,6 +119,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &31752098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 31752099}
+  - component: {fileID: 31752100}
+  m_Layer: 0
+  m_Name: WithdrawMoneyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &31752099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31752098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &31752100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2e25648d99f6e478563d2f5d65bb71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WithdrawMoneyManager
+  nameInputField: {fileID: 490655072}
+  mobileNumberInputField: {fileID: 184143628}
+  withdrawButton: {fileID: 488419618}
+  scriptURL: https://script.google.com/macros/s/AKfycbxRknu2JN_IXR8jBSERun33hUkDOGwQMuj59qaIeTLPwTY-Z53_hnAbay4M2NUxVWTHaQ/exec
 --- !u!1 &61519945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2132,7 +2180,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 488419619}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 31752100}
+        m_TargetAssemblyTypeName: WithdrawMoneyManager, Assembly-CSharp
+        m_MethodName: WithdrawMoney
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &488419619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3260,7 +3320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &816753421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8205,6 +8265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   startingCoins: 0
   coinText: {fileID: 615363176}
+  withdrawPanelBalanceText: {fileID: 104122629}
 --- !u!4 &1834602749
 Transform:
   m_ObjectHideFlags: 0
@@ -24478,3 +24539,4 @@ SceneRoots:
   - {fileID: 1282769187}
   - {fileID: 1824913522}
   - {fileID: 1834602749}
+  - {fileID: 31752099}
