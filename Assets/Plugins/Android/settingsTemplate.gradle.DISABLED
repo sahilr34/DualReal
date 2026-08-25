@@ -7,8 +7,7 @@ pluginManagement {
     }
 }
 
-include ':launcher'
-include ':unityLibrary'
+include ':launcher', ':unityLibrary'
 **INCLUDES**
 
 dependencyResolutionManagement {

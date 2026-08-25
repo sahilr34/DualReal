@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply from: '../shared/common.gradle'
 apply from: '../shared/keepUnitySymbols.gradle'
+apply from: '../shared/common.gradle'
 **APPLY_PLUGINS**
 
 dependencies {
@@ -35,9 +35,8 @@ android {
     namespace "com.unity3d.player"
     ndkPath "**NDKPATH**"
     ndkVersion "**NDKVERSION**"
-
     compileSdk **APIVERSION**
-    buildToolsVersion = "**BUILDTOOLS**"
+    buildToolsVersion "**BUILDTOOLS**"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -51,8 +50,6 @@ android {
             abiFilters **ABIFILTERS**
             debugSymbolLevel **DEBUGSYMBOLLEVEL**
         }
-        versionCode **VERSIONCODE**
-        versionName '**VERSIONNAME**'
         consumerProguardFiles 'proguard-unity.txt'**USER_PROGUARD**
 **DEFAULT_CONFIG_SETUP**
     }
