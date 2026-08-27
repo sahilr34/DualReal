@@ -52,7 +52,7 @@ public class GameOverUI : MonoBehaviour
 
     private void RestartGame()
     {
-        SceneManager.LoadScene(gameSceneName);
+        //SceneManager.LoadScene(gameSceneName);
     }
 
     private void GoToMainMenu()

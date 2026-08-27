@@ -1,0 +1,793 @@
+fileFormatVersion: 2
+guid: 9addc96723f78d04ab951b1ce7cc153f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7228862410116743148
+    second: RedBlueBallGraphicsImg_0
+  - first:
+      213: -3875263907799695227
+    second: RedBlueBallGraphicsImg_1
+  - first:
+      213: 6581790670019804897
+    second: RedBlueBallGraphicsImg_2
+  - first:
+      213: -2202667001089076479
+    second: RedBlueBallGraphicsImg_3
+  - first:
+      213: -2380169662097712412
+    second: RedBlueBallGraphicsImg_4
+  - first:
+      213: 4092426421353430350
+    second: RedBlueBallGraphicsImg_5
+  - first:
+      213: 8995264884484245128
+    second: RedBlueBallGraphicsImg_6
+  - first:
+      213: 1033531970762590528
+    second: RedBlueBallGraphicsImg_7
+  - first:
+      213: -4491680263279983780
+    second: RedBlueBallGraphicsImg_8
+  - first:
+      213: 5561980294566857918
+    second: RedBlueBallGraphicsImg_9
+  - first:
+      213: 1579241651413803363
+    second: RedBlueBallGraphicsImg_10
+  - first:
+      213: 1043358067427209194
+    second: RedBlueBallGraphicsImg_11
+  - first:
+      213: 2210670218361653149
+    second: RedBlueBallGraphicsImg_12
+  - first:
+      213: 4962033458434130862
+    second: RedBlueBallGraphicsImg_13
+  - first:
+      213: -1929695732995839188
+    second: RedBlueBallGraphicsImg_14
+  - first:
+      213: 8678346118917716462
+    second: RedBlueBallGraphicsImg_15
+  - first:
+      213: -4488580192527647279
+    second: RedBlueBallGraphicsImg_16
+  - first:
+      213: -3480020574394173754
+    second: RedBlueBallGraphicsImg_17
+  - first:
+      213: 7631733177962906728
+    second: RedBlueBallGraphicsImg_18
+  - first:
+      213: -4766511425251374769
+    second: RedBlueBallGraphicsImg_19
+  - first:
+      213: -703814379150431664
+    second: RedBlueBallGraphicsImg_20
+  - first:
+      213: -5613009918688670987
+    second: RedBlueBallGraphicsImg_21
+  - first:
+      213: -417443818420021285
+    second: RedBlueBallGraphicsImg_22
+  - first:
+      213: 6259943521234504917
+    second: RedBlueBallGraphicsImg_23
+  - first:
+      213: -5746063595772653564
+    second: RedBlueBallGraphicsImg_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1223
+        height: 1254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41041da20fbedab90800000000000000
+      internalID: -7228862410116743148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_1
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 964
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58005b4020c483ac0800000000000000
+      internalID: -3875263907799695227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_2
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 915
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eeb2881eb7375b50800000000000000
+      internalID: 6581790670019804897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_3
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 905
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1035c91680e8e61e0800000000000000
+      internalID: -2202667001089076479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_4
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 884
+        width: 58
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea11819d40f7fed0800000000000000
+      internalID: -2380169662097712412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_5
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 902
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4db13ac5283bc830800000000000000
+      internalID: 4092426421353430350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_6
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 809
+        width: 43
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8868a34e0c995dc70800000000000000
+      internalID: 8995264884484245128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_7
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 777
+        width: 52
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 049405df9d7d75e00800000000000000
+      internalID: 1033531970762590528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_8
+      rect:
+        serializedVersion: 2
+        x: 1123
+        y: 793
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c53409639985aa1c0800000000000000
+      internalID: -4491680263279983780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_9
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 782
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebc4169fb9f103d40800000000000000
+      internalID: 5561980294566857918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_10
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 785
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 361650f2ae79ae510800000000000000
+      internalID: 1579241651413803363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_11
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 763
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aef698662a0ca7e00800000000000000
+      internalID: 1043358067427209194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_12
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 755
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d974bf8d9d0edae10800000000000000
+      internalID: 2210670218361653149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_13
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 632
+        width: 74
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea3c195f32facd440800000000000000
+      internalID: 4962033458434130862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_14
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 524
+        width: 10
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2b223e64f75835e0800000000000000
+      internalID: -1929695732995839188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_15
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 525
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee9faf7b0ddaf6870800000000000000
+      internalID: 8678346118917716462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_16
+      rect:
+        serializedVersion: 2
+        x: 1137
+        y: 493
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ddf88ea81c55b1c0800000000000000
+      internalID: -4488580192527647279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_17
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 467
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c63f2cb9bb74bfc0800000000000000
+      internalID: -3480020574394173754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_18
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 465
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 864ca0504ec59e960800000000000000
+      internalID: 7631733177962906728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_19
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 467
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f490d00ec13f9ddb0800000000000000
+      internalID: -4766511425251374769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_20
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 473
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05a2de61d8c8b36f0800000000000000
+      internalID: -703814379150431664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 457
+        width: 5
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fa41dbc7359a12b0800000000000000
+      internalID: -5613009918688670987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_22
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 441
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd754611f01f43af0800000000000000
+      internalID: -417443818420021285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_23
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 326
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5dcc0394779cfd650800000000000000
+      internalID: 6259943521234504917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBlueBallGraphicsImg_24
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 168
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 400da258a91e140b0800000000000000
+      internalID: -5746063595772653564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RedBlueBallGraphicsImg_0: -7228862410116743148
+      RedBlueBallGraphicsImg_1: -3875263907799695227
+      RedBlueBallGraphicsImg_10: 1579241651413803363
+      RedBlueBallGraphicsImg_11: 1043358067427209194
+      RedBlueBallGraphicsImg_12: 2210670218361653149
+      RedBlueBallGraphicsImg_13: 4962033458434130862
+      RedBlueBallGraphicsImg_14: -1929695732995839188
+      RedBlueBallGraphicsImg_15: 8678346118917716462
+      RedBlueBallGraphicsImg_16: -4488580192527647279
+      RedBlueBallGraphicsImg_17: -3480020574394173754
+      RedBlueBallGraphicsImg_18: 7631733177962906728
+      RedBlueBallGraphicsImg_19: -4766511425251374769
+      RedBlueBallGraphicsImg_2: 6581790670019804897
+      RedBlueBallGraphicsImg_20: -703814379150431664
+      RedBlueBallGraphicsImg_21: -5613009918688670987
+      RedBlueBallGraphicsImg_22: -417443818420021285
+      RedBlueBallGraphicsImg_23: 6259943521234504917
+      RedBlueBallGraphicsImg_24: -5746063595772653564
+      RedBlueBallGraphicsImg_3: -2202667001089076479
+      RedBlueBallGraphicsImg_4: -2380169662097712412
+      RedBlueBallGraphicsImg_5: 4092426421353430350
+      RedBlueBallGraphicsImg_6: 8995264884484245128
+      RedBlueBallGraphicsImg_7: 1033531970762590528
+      RedBlueBallGraphicsImg_8: -4491680263279983780
+      RedBlueBallGraphicsImg_9: 5561980294566857918
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
