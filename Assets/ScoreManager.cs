@@ -4,150 +4,127 @@ using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
+    public static ScoreManager Instance;
+
     [Header("UI")]
     public Text scoreText;
-    public Text targetScoreText; // Added target score text
+    public Text targetScoreText;
 
     [Header("Score Settings")]
     private int score = 0;
-    private bool isScoring = true;
+    private bool isScoring = false;
+
     private int nextAdScore = 40;
 
     [Header("Win Condition")]
-    public int targetScore = 40; // Will be overwritten with random value
+    public int targetScore = 40;
+
     public string youWinSceneName = "YouWin";
     public string chaseSceneName = "Chase";
     public string endlessSceneName = "Endless";
-
-    public static ScoreManager Instance; // Singleton बनाएं
 
     private bool allowWinCondition = false;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Scene बदलने पर नष्ट न हो
-            SceneManager.sceneLoaded += OnSceneLoaded; // Scene change track करें
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
     }
 
     private void OnDestroy()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+        CancelInvoke(nameof(AddScore));
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        FindScoreText();
-
-        string currentScene = scene.name;
-
-        if (currentScene == chaseSceneName || currentScene == endlessSceneName)
+        if (Instance == this)
         {
-            if (!GameState.reviveUsed)
-            {
-                ResetScore();
-            }
-            else
-            {
-                score = GameState.savedScore;
-            }
-
-            StartScoring();
-            SetTargetScoreForCurrentScene(currentScene);
-            UpdateScoreText();
+            Instance = null;
         }
     }
+
+   
 
     private void Start()
     {
-        if (GameState.reviveUsed)
-        {
-            score = GameState.savedScore;
-        }
+        score = 0;
+        nextAdScore = 40;
 
-        string currentScene = SceneManager.GetActiveScene().name;
+        string currentScene =
+            SceneManager.GetActiveScene().name;
 
         SetTargetScoreForCurrentScene(currentScene);
 
-        FindScoreText();
         UpdateScoreText();
 
-        CancelInvoke(nameof(AddScore));
         StartScoring();
     }
 
-    // FIX: नया method - target score को current scene के हिसाब से सेट करता है
-    private void SetTargetScoreForCurrentScene(string sceneName)
+   
+
+
+    private void SetTargetScoreForCurrentScene(
+        string sceneName)
     {
-        allowWinCondition = sceneName == chaseSceneName;
+        allowWinCondition =
+            sceneName == chaseSceneName;
 
         if (allowWinCondition)
         {
-            // हर बार Chase scene लोड होने पर नया random target score
-            targetScore = Random.Range(100, 160); // 50-100 के बीच random
+            targetScore =
+                Random.Range(100, 160);
         }
 
         UpdateScoreText();
     }
 
-    private void FindScoreText()
-    {
-        if (scoreText == null)
-        {
-            GameObject scoreObj = GameObject.FindGameObjectWithTag("ScoreText");
-            if (scoreObj != null)
-            {
-                scoreText = scoreObj.GetComponent<Text>();
-            }
-        }
-
-        // Added: Find target score text
-        if (targetScoreText == null)
-        {
-            GameObject targetObj = GameObject.FindGameObjectWithTag("TargetScoreText");
-            if (targetObj != null)
-            {
-                targetScoreText = targetObj.GetComponent<Text>();
-            }
-        }
-    }
+    
 
     private void StartScoring()
     {
         isScoring = true;
+
         CancelInvoke(nameof(AddScore));
-        InvokeRepeating(nameof(AddScore), 1f, 1f);
+
+        InvokeRepeating(
+            nameof(AddScore),
+            1f,
+            1f);
     }
 
     public void ResetScore()
     {
         score = 0;
         nextAdScore = 40;
+
         isScoring = false;
+
+        CancelInvoke(nameof(AddScore));
+
         UpdateScoreText();
     }
 
     private void AddScore()
     {
-        if (!isScoring) return;
+        if (!isScoring)
+            return;
 
         score++;
+
         UpdateScoreText();
 
         if (score >= nextAdScore)
         {
             ShowAd();
+
             nextAdScore += 40;
         }
 
-        if (allowWinCondition && score >= targetScore)
+        if (allowWinCondition &&
+            score >= targetScore)
         {
             WinGame();
         }
@@ -156,29 +133,46 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScoreText()
     {
         if (scoreText != null)
-            scoreText.text = "Score: " + score;
+        {
+            scoreText.text =
+                "Score: " + score;
+        }
 
-        // Added: Update target score text
         if (targetScoreText != null)
-            targetScoreText.text = "Target: " + targetScore;
+        {
+            targetScoreText.text =
+                "Target: " + targetScore;
+        }
     }
 
     private void WinGame()
     {
         isScoring = false;
+
         CancelInvoke(nameof(AddScore));
-        PlayerPrefs.SetInt("FinalScore", score);
+
+        PlayerPrefs.SetInt(
+            "FinalScore",
+            score);
+
         PlayerPrefs.Save();
-        SceneManager.LoadScene(youWinSceneName);
+
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene(
+            youWinSceneName);
     }
+
     public void StopAndSaveScore()
     {
         isScoring = false;
+
         CancelInvoke(nameof(AddScore));
 
-        GameState.savedScore = score;
+        PlayerPrefs.SetInt(
+            "FinalScore",
+            score);
 
-        PlayerPrefs.SetInt("FinalScore", score);
         PlayerPrefs.Save();
     }
 
@@ -187,41 +181,17 @@ public class ScoreManager : MonoBehaviour
         if (AdManager.Instance != null)
         {
             AdManager.Instance.ShowInterstitialAd();
-            Debug.Log("Showing Interstitial Ad at score: " + score);
-        }
-        else
-        {
-            Debug.LogWarning("AdManager not found in scene!");
-        }
-    }
 
-    // Restart game method
-    public void RestartGame()
-    {
-        // Save current score
-        StopAndSaveScore();
-
-        // Use AdManager to show ad before restarting
-        if (AdManager.Instance != null)
-        {
-            AdManager.Instance.RequestRestartWithAd(() =>
-            {
-                // यह callback ad के बाद call होगा
-                ResetScore();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            });
-        }
-        else
-        {
-            // No AdManager, just restart
-            ResetScore();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Debug.Log(
+                "Showing Interstitial Ad at score: "
+                + score);
         }
     }
 
     public void PauseScoring()
     {
         isScoring = false;
+
         CancelInvoke(nameof(AddScore));
     }
 
@@ -230,9 +200,11 @@ public class ScoreManager : MonoBehaviour
         if (isScoring)
             return;
 
-        isScoring = true;
+        StartScoring();
+    }
 
-        CancelInvoke(nameof(AddScore));
-        InvokeRepeating(nameof(AddScore), 1f, 1f);
+    public int GetCurrentScore()
+    {
+        return score;
     }
 }

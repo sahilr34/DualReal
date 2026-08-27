@@ -1,18 +1,18 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+
 
 public class DuetPCController : MonoBehaviour
 {
     public float rotateSpeed = 180f;
 
     private float dir = 0f;
+
     private bool leftTutorialDone;
     private bool rightTutorialDone;
 
     private void Update()
     {
-
         // Mobile Controls as well as PC Controls
         if (Pointer.current == null)
             return;
@@ -20,7 +20,8 @@ public class DuetPCController : MonoBehaviour
         // Rotate ONLY while pressing/touching
         if (Pointer.current.press.isPressed)
         {
-            Vector2 pointerPos = Pointer.current.position.ReadValue();
+            Vector2 pointerPos =
+                Pointer.current.position.ReadValue();
 
             if (pointerPos.x < Screen.width * 0.5f)
             {
@@ -31,7 +32,9 @@ public class DuetPCController : MonoBehaviour
                     TutorialUIManager.Instance.IsTutorialActive)
                 {
                     leftTutorialDone = true;
-                    TutorialUIManager.Instance.OnLeftTutorialCompleted();
+
+                    TutorialUIManager.Instance
+                        .OnLeftTutorialCompleted();
                 }
             }
             else
@@ -43,41 +46,39 @@ public class DuetPCController : MonoBehaviour
                     TutorialUIManager.Instance.IsTutorialActive)
                 {
                     rightTutorialDone = true;
-                    TutorialUIManager.Instance.OnRightTutorialCompleted();
+
+                    TutorialUIManager.Instance
+                        .OnRightTutorialCompleted();
                 }
             }
         }
-
         else
+        {
             dir = 0f;
+        }
 
         // Rotate only when dir != 0
         if (dir != 0f)
         {
-            transform.Rotate(0f, 0f, dir * rotateSpeed * Time.deltaTime);
+            transform.Rotate(
+                0f,
+                0f,
+                dir * rotateSpeed * Time.deltaTime
+            );
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Obstacle"))
+        if (!collision.CompareTag("Obstacle"))
+            return;
+
+        
+
+        // Let GameFlowManager handle the collision.
+        if (GameFlowManager.Instance != null)
         {
-            ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
-
-            if (scoreManager != null)
-            {
-                scoreManager.StopAndSaveScore();
-            }
-
-            if (!GameState.reviveUsed)
-            {
-                GameState.lastGameScene = SceneManager.GetActiveScene().name;
-                SceneManager.LoadScene("Revive");
-            }
-            else
-            {
-                SceneManager.LoadScene("GameOver");
-            }
+            GameFlowManager.Instance.PlayerHit();
         }
     }
 }

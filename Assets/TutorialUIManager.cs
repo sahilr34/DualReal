@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 
@@ -26,7 +27,7 @@ public class TutorialUIManager : MonoBehaviour
 
     [Header("Important References")]
     [SerializeField] private ObstacleSpawner obstacleSpawner;
-    [SerializeField] private ScoreManager  scoreManager;
+    [SerializeField] private ScoreManager scoreManager;
 
     [Header("Testing")]
     [SerializeField] private bool isTesting = false;

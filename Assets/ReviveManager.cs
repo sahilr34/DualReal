@@ -1,66 +1,142 @@
+﻿
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class ReviveManager : MonoBehaviour
 {
     [Header("UI")]
-    public TMP_Text timerText;
+    [SerializeField] private GameObject revivePanel;
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private Button noThanksButton;
+    [SerializeField] private Button watchAdButton;
 
     [Header("Settings")]
-    public float reviveTimer = 10f;
+    [SerializeField] private float reviveTimer = 10f;
 
     private float timer;
-    private bool rewardReceived = false;
+    private bool rewardReceived;
+    private bool timerRunning;
 
-    private void OnEnable()
+    private void Awake()
     {
-        timer = reviveTimer;
-        rewardReceived = false;
+        if (noThanksButton != null)
+            noThanksButton.onClick.AddListener(NoThanks);
+
+        if (watchAdButton != null)
+            watchAdButton.onClick.AddListener(WatchAd);
+
+        HidePanel();
+    }
+
+    private void OnDestroy()
+    {
+        if (noThanksButton != null)
+            noThanksButton.onClick.RemoveListener(NoThanks);
+
+        if (watchAdButton != null)
+            watchAdButton.onClick.RemoveListener(WatchAd);
 
         if (AdManager.Instance != null)
         {
-            AdManager.Instance.OnRewardEarned += OnRewardEarned;
+            AdManager.Instance.OnRewardEarned -=
+                OnRewardEarned;
         }
     }
 
-    private void OnDisable()
+    public void ShowPanel()
     {
+        if (revivePanel != null)
+            revivePanel.SetActive(true);
+
+        timer = reviveTimer;
+        rewardReceived = false;
+        timerRunning = true;
+
+        UpdateTimerText();
+
         if (AdManager.Instance != null)
         {
-            AdManager.Instance.OnRewardEarned -= OnRewardEarned;
+            AdManager.Instance.OnRewardEarned -=
+                OnRewardEarned;
+
+            AdManager.Instance.OnRewardEarned +=
+                OnRewardEarned;
         }
+    }
+
+    public void HidePanel()
+    {
+        timerRunning = false;
+
+        if (revivePanel != null)
+            revivePanel.SetActive(false);
     }
 
     private void Update()
     {
-        if (rewardReceived)
+        if (!timerRunning || rewardReceived)
             return;
 
-        timer -= Time.deltaTime;
+        // Time.timeScale = 0 during revive. 
+        // Therefore use unscaledDeltaTime. 
+        timer -= Time.unscaledDeltaTime;
 
-        if (timerText != null)
-        {
-            timerText.text = Mathf.CeilToInt(timer).ToString();
-        }
+        UpdateTimerText();
 
         if (timer <= 0f)
         {
-            SceneManager.LoadScene("GameOver");
+            timerRunning = false;
+
+            if (GameFlowManager.Instance != null)
+            {
+                GameFlowManager.Instance.ShowGameOver();
+            }
+        }
+    }
+
+    private void UpdateTimerText()
+    {
+        if (timerText != null)
+        {
+            timerText.text =
+                Mathf.Max(0, Mathf.CeilToInt(timer)).ToString();
         }
     }
 
     public void NoThanks()
     {
-        SceneManager.LoadScene("GameOver");
+        if (!timerRunning)
+            return;
+
+        timerRunning = false;
+
+        if (GameFlowManager.Instance != null)
+        {
+            GameFlowManager.Instance.ShowGameOver();
+        }
     }
 
     public void WatchAd()
     {
+        if (rewardReceived)
+            return;
+
+        // Immediately stop countdown.
+        timerRunning = false;
+
+        // Prevent timeout logic completely.
+        timer = 0f;
+
+        Debug.Log("Revive ad requested. Timer stopped.");
+
         if (AdManager.Instance != null)
         {
             AdManager.Instance.ShowRewardedAd();
+        }
+        else
+        {
+            OnRewardEarned();
         }
     }
 
@@ -70,8 +146,17 @@ public class ReviveManager : MonoBehaviour
             return;
 
         rewardReceived = true;
-        GameState.reviveUsed = true;
+        timerRunning = false;
 
-        SceneManager.LoadScene(GameState.lastGameScene);
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.OnRewardEarned -=
+                OnRewardEarned;
+        }
+
+        if (GameFlowManager.Instance != null)
+        {
+            GameFlowManager.Instance.RevivePlayer();
+        }
     }
 }

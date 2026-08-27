@@ -1,82 +1,192 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameOverUI : MonoBehaviour
 {
-    public TMP_Text finalScoreText;
-    public Button restartButton;
-    public Button mainMenuButton;
+    [Header("UI")]
+    [SerializeField] private GameObject gameOverPanel;
 
-    [Header("Scene Names")]
-    public string gameSceneName = "Level1";
-    public string mainMenuSceneName = "Mainmenu";
+    [SerializeField] private TMP_Text finalScoreText;
 
-    private int finalScore;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button mainMenuButton;
+
     private bool rewardClaimed = false;
 
-    private void Start()
+    private void Awake()
     {
-        finalScore = PlayerPrefs.GetInt("FinalScore", 0);
-        finalScoreText.text = finalScore.ToString();
+        if (restartButton != null)
+        {
+            restartButton.onClick.AddListener(
+                OnRestartButtonClick
+            );
+        }
 
-        restartButton.onClick.AddListener(OnRestartButtonClick);
-        mainMenuButton.onClick.AddListener(GoToMainMenu);
-    
+        if (mainMenuButton != null)
+        {
+            mainMenuButton.onClick.AddListener(
+                GoToMainMenu
+            );
+        }
 
-        // Subscribe to reward event
-        if (AdManager.Instance != null)
-            AdManager.Instance.OnRewardEarned += DoubleScore;
+        HidePanel();
     }
 
     private void OnDestroy()
     {
-        if (AdManager.Instance != null)
-            AdManager.Instance.OnRewardEarned -= DoubleScore;
+        if (restartButton != null)
+        {
+            restartButton.onClick.RemoveListener(
+                OnRestartButtonClick
+            );
+        }
+
+        if (mainMenuButton != null)
+        {
+            mainMenuButton.onClick.RemoveListener(
+                GoToMainMenu
+            );
+        }
+
+        UnsubscribeFromAd();
+    }
+
+    private void SubscribeToAd()
+    {
+        if (AdManager.Instance == null)
+            return;
+
+        AdManager.Instance.OnRewardEarned -= DoubleScore;
+        AdManager.Instance.OnRewardEarned += DoubleScore;
+    }
+
+    private void UnsubscribeFromAd()
+    {
+        if (AdManager.Instance == null)
+            return;
+
+        AdManager.Instance.OnRewardEarned -= DoubleScore;
+    }
+
+    public void ShowPanel()
+    {
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+
+        rewardClaimed = false;
+
+        UpdateFinalScore();
+
+        SubscribeToAd();
+    }
+
+    public void HidePanel()
+    {
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+
+        UnsubscribeFromAd();
+    }
+
+    private void UpdateFinalScore()
+    {
+        int finalScore = 0;
+
+        if (ScoreManager.Instance != null)
+        {
+            finalScore =
+                ScoreManager.Instance.GetCurrentScore();
+        }
+
+        if (finalScoreText != null)
+        {
+            finalScoreText.text =
+                finalScore.ToString();
+        }
     }
 
     private void OnRestartButtonClick()
     {
-        // AdManager से restart request करें (ad show हो सकता है)
+        /*
+         * Immediately remove our ad callback.
+         *
+         * This is important because this GameOverUI
+         * is about to be destroyed.
+         */
+        UnsubscribeFromAd();
+
         if (AdManager.Instance != null)
         {
-            AdManager.Instance.RequestRestartWithAd(RestartGame);
+            AdManager.Instance.RequestRestartWithAd(
+                RestartGame
+            );
         }
         else
         {
-            // अगर AdManager नहीं है तो सीधे restart करें
             RestartGame();
         }
     }
 
     private void RestartGame()
     {
-        //SceneManager.LoadScene(gameSceneName);
+        if (GameFlowManager.Instance != null)
+        {
+            GameFlowManager.Instance.RestartCurrentScene();
+        }
+        else
+        {
+            Debug.LogError(
+                "GameFlowManager.Instance is NULL!"
+            );
+        }
     }
 
     private void GoToMainMenu()
     {
-        SceneManager.LoadScene(mainMenuSceneName);
-    }
+        UnsubscribeFromAd();
 
-    private void ShowRewardedAd()
-    {
-        if (AdManager.Instance != null)
+        if (GameFlowManager.Instance != null)
         {
-            AdManager.Instance.ShowRewardedAd();
+            GameFlowManager.Instance.GoToMainMenu();
         }
     }
 
     private void DoubleScore()
     {
-        if (rewardClaimed) return; // prevent multiple rewards
+        if (rewardClaimed)
+            return;
 
         rewardClaimed = true;
-        finalScore *= 2;
-        PlayerPrefs.SetInt("FinalScore", finalScore);
-        finalScoreText.text = finalScore.ToString();
 
-        Debug.Log("🎯 Score doubled after watching ad!");
+        UnsubscribeFromAd();
+
+        int currentScore = 0;
+
+        if (ScoreManager.Instance != null)
+        {
+            currentScore =
+                ScoreManager.Instance.GetCurrentScore();
+        }
+
+        int doubledScore =
+            currentScore * 2;
+
+        PlayerPrefs.SetInt(
+            "FinalScore",
+            doubledScore
+        );
+
+        PlayerPrefs.Save();
+
+        if (finalScoreText != null)
+        {
+            finalScoreText.text =
+                doubledScore.ToString();
+        }
+
+        Debug.Log(
+            "Score doubled after watching ad."
+        );
     }
 }

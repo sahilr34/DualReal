@@ -3,59 +3,115 @@ using UnityEngine;
 public class ObstacleSpawner : MonoBehaviour
 {
     [Header("Obstacle Settings")]
-    public GameObject[] obstaclePrefabs; // Multiple prefabs
+    public GameObject[] obstaclePrefabs;
+
     public float interval = 1.5f;
-    public float fallSpeed = 3f; // Speed of falling obstacles
+    public float fallSpeed = 3f;
 
     [Tooltip("Set fixed Z rotation for each obstacle in the same order as prefabs")]
-    public float[] fixedZRotations; // Different rotations for each prefab
+    public float[] fixedZRotations;
 
     [Header("Spawn Range")]
-    public float leftLimit = -3f;  // Left X position
-    public float rightLimit = 3f;  // Right X position
-    public float spawnY = 6f;      // Top Y position
+    public float leftLimit = -3f;
+    public float rightLimit = 3f;
+    public float spawnY = 6f;
 
-    void Start()
+    private void OnEnable()
     {
-        InvokeRepeating(nameof(Spawn), 1f, interval);
+        // Make sure no old Invoke is running
+        CancelInvoke(nameof(Spawn));
+
+        // Start spawning whenever this component is enabled
+        InvokeRepeating(
+            nameof(Spawn),
+            1f,
+            interval
+        );
+
+        Debug.Log("ObstacleSpawner ENABLED - Spawning started.");
     }
 
-    void Spawn()
+    private void OnDisable()
     {
-        if (obstaclePrefabs.Length == 0) return;
+        // Stop spawning whenever this component is disabled
+        CancelInvoke(nameof(Spawn));
 
-        // Pick random index
-        int index = Random.Range(0, obstaclePrefabs.Length);
+        Debug.Log("ObstacleSpawner DISABLED - Spawning stopped.");
+    }
 
-        // Select prefab & matching rotation
+    private void Spawn()
+    {
+        if (obstaclePrefabs == null ||
+            obstaclePrefabs.Length == 0)
+        {
+            Debug.LogWarning(
+                "ObstacleSpawner: No obstacle prefabs assigned."
+            );
+
+            return;
+        }
+
+        int index = Random.Range(
+            0,
+            obstaclePrefabs.Length
+        );
+
         GameObject prefab = obstaclePrefabs[index];
-        float zRotation = (index < fixedZRotations.Length) ? fixedZRotations[index] : 0f;
 
-        // Random X position
-        float randomX = Random.Range(leftLimit, rightLimit);
+        float zRotation =
+            (fixedZRotations != null &&
+             index < fixedZRotations.Length)
+                ? fixedZRotations[index]
+                : 0f;
 
-        // Spawn with specific rotation
-        Quaternion rotation = Quaternion.Euler(0, 0, zRotation);
-        GameObject newObstacle = Instantiate(prefab, new Vector2(randomX, spawnY), rotation);
+        float randomX = Random.Range(
+            leftLimit,
+            rightLimit
+        );
 
-        // Tag ensure
-        newObstacle.tag = "Obstacle"; // <-- Tag set karo
+        Quaternion rotation =
+            Quaternion.Euler(
+                0f,
+                0f,
+                zRotation
+            );
 
-        // Rigidbody2D settings
-        Rigidbody2D rb = newObstacle.GetComponent<Rigidbody2D>();
+        GameObject newObstacle =
+            Instantiate(
+                prefab,
+                new Vector2(
+                    randomX,
+                    spawnY
+                ),
+                rotation
+            );
+
+        newObstacle.tag = "Obstacle";
+
+        Rigidbody2D rb =
+            newObstacle.GetComponent<Rigidbody2D>();
+
         if (rb == null)
+        {
             rb = newObstacle.AddComponent<Rigidbody2D>();
+        }
 
         rb.gravityScale = 0f;
-        rb.linearVelocity = Vector2.down * fallSpeed;
+
+        rb.linearVelocity =
+            Vector2.down * fallSpeed;
+
         rb.freezeRotation = true;
-        rb.isKinematic = false; // Important for trigger detection
+        rb.isKinematic = false;
 
-        // Collider settings
-        Collider2D col = newObstacle.GetComponent<Collider2D>();
+        Collider2D col =
+            newObstacle.GetComponent<Collider2D>();
+
         if (col == null)
+        {
             col = newObstacle.AddComponent<BoxCollider2D>();
+        }
 
-        col.isTrigger = false; // Trigger off for obstacle
+        col.isTrigger = false;
     }
 }

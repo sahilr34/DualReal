@@ -8,26 +8,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mainmenu.unity
     guid: 6627e741e85da8c4895cb110e7dc6c2c
-  - enabled: 0
-    path: Assets/Scenes/Level.unity
-    guid: c9cc5f38dcd774b4692263daeb9164c2
   - enabled: 1
     path: Assets/Scenes/Endless.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/Scenes/Gameover.unity
-    guid: 13a81d788e67d374e99072946fa1e956
   - enabled: 1
     path: Assets/Scenes/YouWin.unity
     guid: e7dff3f635f237e4aa2f259af3089ec9
   - enabled: 1
     path: Assets/Scenes/Chase.unity
     guid: 66450f1176631ec42884e4832ef78ac5
-  - enabled: 1
-    path: Assets/Scenes/Revive.unity
-    guid: 8039303fd7001da44a6ae98e6b4a36db
-  - enabled: 0
-    path: Assets/Scenes/Setting.unity
-    guid: 64c2b1860dac1d44d902ab8c20c9de57
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
