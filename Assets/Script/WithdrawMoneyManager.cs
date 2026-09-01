@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,16 +17,14 @@ public class WithdrawMoneyManager : MonoBehaviour
     [Header("Google Apps Script URL")]
     [SerializeField]
     private string scriptURL =
-        "https://script.google.com/macros/s/AKfycbxRknu2JN_IXR8jBSERun33hUkDOGwQMuj59qaIeTLPwTY-Z53_hnAbay4M2NUxVWTHaQ/exec";
+        "https://script.google.com/macros/s/AKfycbx3LyY3wmehQBK46H9wmtlqdNBPiAKpx9Mj8v-_7NyhX_JMP0cGayMUDM_G_ld9fp-Z/exec";
 
     private bool isSubmitting = false;
 
     private void Start()
     {
-        // Make sure the button starts with the correct state
         UpdateWithdrawButtonState();
 
-        // Listen for changes in the input fields
         nameInputField.onValueChanged.AddListener(OnInputChanged);
         mobileNumberInputField.onValueChanged.AddListener(OnInputChanged);
     }
@@ -61,7 +60,6 @@ public class WithdrawMoneyManager : MonoBehaviour
     {
         string mobile = mobileNumberInputField.text.Trim();
 
-        // Must contain exactly 10 digits
         if (mobile.Length != 10)
             return false;
 
@@ -86,21 +84,18 @@ public class WithdrawMoneyManager : MonoBehaviour
         string name = nameInputField.text.Trim();
         string mobile = mobileNumberInputField.text.Trim();
 
-        // Validate name
         if (string.IsNullOrWhiteSpace(name))
         {
             Debug.LogWarning("Please enter your name.");
             return;
         }
 
-        // Validate mobile number
         if (!IsValidMobileNumber())
         {
             Debug.LogWarning("Please enter a valid 10-digit mobile number.");
             return;
         }
 
-        // Get current coins
         if (CoinManager.Instance == null)
         {
             Debug.LogError("CoinManager.Instance is NULL!");
@@ -109,7 +104,6 @@ public class WithdrawMoneyManager : MonoBehaviour
 
         int availableBalance = CoinManager.Instance.CurrentCoins;
 
-        // Prevent withdrawal if balance is zero
         if (availableBalance <= 0)
         {
             Debug.LogWarning("You don't have enough coins to withdraw.");
@@ -142,13 +136,17 @@ public class WithdrawMoneyManager : MonoBehaviour
 
         WWWForm form = new WWWForm();
 
-        // Data sent to Google Apps Script
-        form.AddField("name", name);
-        form.AddField("mobile", mobile);
-        form.AddField("availableBalance", availableBalance.ToString());
+        string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+        string currentTime = DateTime.Now.ToString("HH:mm:ss");
 
-        UnityWebRequest www =
-            UnityWebRequest.Post(scriptURL, form);
+        // Data sent to Google Apps Script
+        form.AddField("fullname", name);
+        form.AddField("mobile", mobile);
+        form.AddField("coins", availableBalance.ToString());
+        form.AddField("date", currentDate);
+        form.AddField("time", currentTime);
+
+        UnityWebRequest www = UnityWebRequest.Post(scriptURL, form);
 
         yield return www.SendWebRequest();
 
@@ -156,10 +154,7 @@ public class WithdrawMoneyManager : MonoBehaviour
 
         if (www.downloadHandler != null)
         {
-            Debug.Log(
-                "Server Response: " +
-                www.downloadHandler.text
-            );
+            Debug.Log("Server Response: " + www.downloadHandler.text);
         }
 
         // =====================================================
@@ -170,18 +165,16 @@ public class WithdrawMoneyManager : MonoBehaviour
         {
             Debug.Log("Withdrawal data saved successfully!");
 
-            // Spend coins ONLY after successful Google Sheets request
+            // Coins deduct only after successful Google Sheet request
             bool spentSuccessfully =
                 CoinManager.Instance.SpendCoins(availableBalance);
 
             if (spentSuccessfully)
             {
                 Debug.Log(
-                    $"Withdrawal successful. " +
-                    $"Spent {availableBalance} coins."
+                    $"Withdrawal successful. Spent {availableBalance} coins."
                 );
 
-                // Clear input fields
                 nameInputField.text = "";
                 mobileNumberInputField.text = "";
             }
@@ -200,8 +193,7 @@ public class WithdrawMoneyManager : MonoBehaviour
         else
         {
             Debug.LogError(
-                "Failed to send withdrawal data: " +
-                www.error
+                "Failed to send withdrawal data: " + www.error
             );
 
             Debug.LogError(
