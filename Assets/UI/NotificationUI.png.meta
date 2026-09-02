@@ -5,6 +5,54 @@ TextureImporter:
   - first:
       213: -2702728231986083794
     second: NotificationUI_0
+  - first:
+      213: -4461002559300210571
+    second: NotificationUI_1
+  - first:
+      213: -2280609242280989324
+    second: NotificationUI_2
+  - first:
+      213: 1463487912285939234
+    second: NotificationUI_3
+  - first:
+      213: 7672694066487608040
+    second: NotificationUI_4
+  - first:
+      213: 8967061458248545742
+    second: NotificationUI_5
+  - first:
+      213: 1187006652451230902
+    second: NotificationUI_6
+  - first:
+      213: -4428662349562898372
+    second: NotificationUI_7
+  - first:
+      213: -3223125168554589376
+    second: NotificationUI_8
+  - first:
+      213: 5191316311973996125
+    second: NotificationUI_9
+  - first:
+      213: 6180305326607113229
+    second: NotificationUI_10
+  - first:
+      213: -8423927798627744975
+    second: NotificationUI_11
+  - first:
+      213: 4424107794033144255
+    second: NotificationUI_12
+  - first:
+      213: 742483284061301577
+    second: NotificationUI_13
+  - first:
+      213: 7553881695850011031
+    second: NotificationUI_14
+  - first:
+      213: -4108430420549089906
+    second: NotificationUI_15
+  - first:
+      213: -4679999644014985420
+    second: NotificationUI_16
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +148,7 @@ TextureImporter:
     buildTarget: Android
     maxTextureSize: 1024
     resizeAlgorithm: 0
-    textureFormat: 45
+    textureFormat: 50
     textureCompression: 1
     compressionQuality: 100
     crunchedCompression: 0
@@ -129,10 +177,10 @@ TextureImporter:
       name: NotificationUI_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 46
         y: 0
-        width: 1834
-        height: 379
+        width: 2085
+        height: 688
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,6 +191,358 @@ TextureImporter:
       bones: []
       spriteID: e28cc002efafd7ad0800000000000000
       internalID: -2702728231986083794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_1
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 645
+        width: 50
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5707dc6cec55712c0800000000000000
+      internalID: -4461002559300210571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_2
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 635
+        width: 38
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47d6e523af5a950e0800000000000000
+      internalID: -2280609242280989324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_3
+      rect:
+        serializedVersion: 2
+        x: 1291
+        y: 665
+        width: 31
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 226a1e8908a5f4410800000000000000
+      internalID: 1463487912285939234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_4
+      rect:
+        serializedVersion: 2
+        x: 1318
+        y: 663
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e2cd3f0a92ea7a60800000000000000
+      internalID: 7672694066487608040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_5
+      rect:
+        serializedVersion: 2
+        x: 1229
+        y: 624
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec5300203e6617c70800000000000000
+      internalID: 8967061458248545742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_6
+      rect:
+        serializedVersion: 2
+        x: 1343
+        y: 97
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b49169e248197010800000000000000
+      internalID: 1187006652451230902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_7
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 77
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c381820ae0b3a82c0800000000000000
+      internalID: -4428662349562898372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_8
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 53
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 043cead6cb82543d0800000000000000
+      internalID: -3223125168554589376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_9
+      rect:
+        serializedVersion: 2
+        x: 1229
+        y: 53
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d56a6e35ea24b0840800000000000000
+      internalID: 5191316311973996125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_10
+      rect:
+        serializedVersion: 2
+        x: 1376
+        y: 63
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0c1fdb23fad4c550800000000000000
+      internalID: 6180305326607113229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_11
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 49
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 133414d8c42381b80800000000000000
+      internalID: -8423927798627744975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_12
+      rect:
+        serializedVersion: 2
+        x: 1343
+        y: 55
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb1f1674996956d30800000000000000
+      internalID: 4424107794033144255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_13
+      rect:
+        serializedVersion: 2
+        x: 1343
+        y: 49
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ba32eec94dd4a00800000000000000
+      internalID: 742483284061301577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_14
+      rect:
+        serializedVersion: 2
+        x: 1349
+        y: 53
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79917745167c4d860800000000000000
+      internalID: 7553881695850011031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_15
+      rect:
+        serializedVersion: 2
+        x: 1361
+        y: 39
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8543c6cc4cebf6c0800000000000000
+      internalID: -4108430420549089906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NotificationUI_16
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 29
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43f38859e1d4d0fb0800000000000000
+      internalID: -4679999644014985420
       vertices: []
       indices: 
       edges: []
@@ -162,6 +562,22 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       NotificationUI_0: -2702728231986083794
+      NotificationUI_1: -4461002559300210571
+      NotificationUI_10: 6180305326607113229
+      NotificationUI_11: -8423927798627744975
+      NotificationUI_12: 4424107794033144255
+      NotificationUI_13: 742483284061301577
+      NotificationUI_14: 7553881695850011031
+      NotificationUI_15: -4108430420549089906
+      NotificationUI_16: -4679999644014985420
+      NotificationUI_2: -2280609242280989324
+      NotificationUI_3: 1463487912285939234
+      NotificationUI_4: 7672694066487608040
+      NotificationUI_5: 8967061458248545742
+      NotificationUI_6: 1187006652451230902
+      NotificationUI_7: -4428662349562898372
+      NotificationUI_8: -3223125168554589376
+      NotificationUI_9: 5191316311973996125
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -19,7 +19,28 @@ public class WithdrawMoneyManager : MonoBehaviour
     private string scriptURL =
         "https://script.google.com/macros/s/AKfycbx3LyY3wmehQBK46H9wmtlqdNBPiAKpx9Mj8v-_7NyhX_JMP0cGayMUDM_G_ld9fp-Z/exec";
 
+    [Header("Notification UI")]
+    [SerializeField] private GameObject popupUI;
+    private CanvasGroup notificationCanvasGroup;
+    private TMP_Text notificationText;
+
+    [Header("Notification Animation")]
+    private float fadeInDuration = 0.25f;
+    private float displayDuration = 2.5f;
+    private float fadeOutDuration = 0.5f;
+
+
     private bool isSubmitting = false;
+
+    private const int WITHDRAW_MULTIPLE = 100;
+
+    private Coroutine notificationCoroutine;
+
+    private void Awake()
+    {
+        notificationCanvasGroup = popupUI.GetComponent<CanvasGroup>();
+        notificationText= popupUI.GetComponentInChildren<TMP_Text>(); ;
+    }
 
     private void Start()
     {
@@ -27,6 +48,13 @@ public class WithdrawMoneyManager : MonoBehaviour
 
         nameInputField.onValueChanged.AddListener(OnInputChanged);
         mobileNumberInputField.onValueChanged.AddListener(OnInputChanged);
+
+        if (notificationCanvasGroup != null)
+        {
+            notificationCanvasGroup.alpha = 0f;
+            notificationCanvasGroup.interactable = false;
+            notificationCanvasGroup.blocksRaycasts = false;
+        }
     }
 
     private void OnInputChanged(string value)
@@ -45,11 +73,15 @@ public class WithdrawMoneyManager : MonoBehaviour
 
         bool validName = !string.IsNullOrWhiteSpace(nameInputField.text);
         bool validMobile = IsValidMobileNumber();
+        bool hasEnoughCoins = HasWithdrawableCoins();
 
         withdrawButton.interactable =
             validName &&
             validMobile &&
+             hasEnoughCoins &&
             !isSubmitting;
+
+
     }
 
     // =========================================================
@@ -70,6 +102,38 @@ public class WithdrawMoneyManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    private bool HasWithdrawableCoins()
+    {
+        if (CoinManager.Instance == null)
+            return false;
+
+        int availableBalance = CoinManager.Instance.CurrentCoins;
+
+        // Must have at least 50 coins.
+        return availableBalance >= WITHDRAW_MULTIPLE;
+    }
+
+    private int GetClaimableCoins(int availableCoins)
+    {
+        /*
+         * Examples:
+         *
+         * 63  -> 50
+         * 100 -> 100
+         * 150 -> 150
+         * 499 -> 450
+         * 500 -> 500
+         * 550 -> 550
+         *
+         * Anything below 50 -> 0
+         */
+
+        if (availableCoins < WITHDRAW_MULTIPLE)
+            return 0;
+
+        return  (availableCoins / WITHDRAW_MULTIPLE) * WITHDRAW_MULTIPLE;
     }
 
     // =========================================================
@@ -110,27 +174,47 @@ public class WithdrawMoneyManager : MonoBehaviour
             return;
         }
 
+        int claimableCoins =  GetClaimableCoins(availableBalance);
+
+        if (claimableCoins < WITHDRAW_MULTIPLE)
+        {
+            Debug.LogWarning(
+                $"You need at least {WITHDRAW_MULTIPLE} coins to withdraw."
+            );
+
+            return;
+        }
+
+        int remainingCoins =
+            availableBalance - claimableCoins;
+
+
+
         Debug.Log(
             $"Withdrawal requested | " +
             $"Name: {name} | " +
             $"Mobile: {mobile} | " +
-            $"Balance: {availableBalance}"
+            $"Current Balance: {availableBalance} | " +
+            $"Claimable: {claimableCoins} | " +
+            $"Remaining: {remainingCoins}"
         );
 
-        StartCoroutine(SendWithdrawalData(name, mobile, availableBalance));
+        StartCoroutine(SendWithdrawalData(name, mobile, claimableCoins));
     }
 
     // =========================================================
     // SEND DATA TO GOOGLE SHEETS
     // =========================================================
 
-    private IEnumerator SendWithdrawalData(
-        string name,
-        string mobile,
-        int availableBalance)
+    private IEnumerator SendWithdrawalData(string name,string mobile,int claimableCoins)
     {
         isSubmitting = true;
         UpdateWithdrawButtonState();
+
+        Debug.Log(
+          $"Sending {claimableCoins} coins to Google Sheets..."
+      );
+
 
         Debug.Log("Sending withdrawal data to Google Sheets...");
 
@@ -142,7 +226,7 @@ public class WithdrawMoneyManager : MonoBehaviour
         // Data sent to Google Apps Script
         form.AddField("fullname", name);
         form.AddField("mobile", mobile);
-        form.AddField("coins", availableBalance.ToString());
+        form.AddField("coins", claimableCoins.ToString());
         form.AddField("date", currentDate);
         form.AddField("time", currentTime);
 
@@ -166,15 +250,18 @@ public class WithdrawMoneyManager : MonoBehaviour
             Debug.Log("Withdrawal data saved successfully!");
 
             // Coins deduct only after successful Google Sheet request
-            bool spentSuccessfully =
-                CoinManager.Instance.SpendCoins(availableBalance);
+            bool spentSuccessfully = CoinManager.Instance.SpendCoins(claimableCoins);
 
             if (spentSuccessfully)
             {
-                Debug.Log(
-                    $"Withdrawal successful. Spent {availableBalance} coins."
+                int remainingCoins = CoinManager.Instance.CurrentCoins;
+                Debug.Log($"Withdrawal successful! " +
+                    $"Withdrawn: {claimableCoins} | " +
+                    $"Remaining: {remainingCoins}"
                 );
 
+
+                ShowNotification("Money will be credited in your bank within 24 hrs");
                 nameInputField.text = "";
                 mobileNumberInputField.text = "";
             }
@@ -205,5 +292,92 @@ public class WithdrawMoneyManager : MonoBehaviour
         UpdateWithdrawButtonState();
 
         www.Dispose();
+    }
+
+    private void ShowNotification(string message)
+    {
+        if (popupUI == null || notificationCanvasGroup == null ||notificationText == null)
+        {
+            Debug.LogWarning("Notification UI is not completely assigned.");
+            return;
+        }
+
+
+        // Set notification text.
+        notificationText.text = message;
+
+        // Stop previous notification animation.
+        if (notificationCoroutine != null)
+        {
+            StopCoroutine(notificationCoroutine);
+        }
+
+
+        // Start new notification animation.
+        notificationCoroutine = StartCoroutine(NotificationAnimation());
+    }
+
+
+    // =========================================================
+    // NOTIFICATION ANIMATION
+    // =========================================================
+
+    private IEnumerator NotificationAnimation()
+    {
+        popupUI.SetActive(true);
+
+        // Make sure we start from invisible.
+        notificationCanvasGroup.alpha = 0f;
+
+        // -----------------------------------------------------
+        // FADE IN
+        // -----------------------------------------------------
+
+        yield return StartCoroutine(FadeCanvasGroup(0f,1f,fadeInDuration));
+
+
+        // -----------------------------------------------------
+        // DISPLAY
+        // -----------------------------------------------------
+
+        yield return new WaitForSeconds(displayDuration);
+
+
+        // -----------------------------------------------------
+        // FADE OUT
+        // -----------------------------------------------------
+
+        yield return StartCoroutine(FadeCanvasGroup(1f,0f,fadeOutDuration)
+        );
+
+
+        popupUI.SetActive(false);
+        notificationCoroutine = null;
+    }
+
+
+    // =========================================================
+    // FADE CANVAS GROUP
+    // =========================================================
+
+    private IEnumerator FadeCanvasGroup(float startAlpha,float targetAlpha,float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed / duration;
+
+
+            // Smooth animation.
+            progress = Mathf.SmoothStep(0f,1f,progress);
+
+
+            notificationCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, progress);
+            yield return null;
+        }
+        // Ensure exact final value.
+        notificationCanvasGroup.alpha = targetAlpha;
     }
 }
