@@ -14,10 +14,17 @@ public class WithdrawMoneyManager : MonoBehaviour
     [Header("Withdraw Button")]
     [SerializeField] private Button withdrawButton;
 
-    [Header("Google Apps Script URL")]
+    [Header("Google Form")]
     [SerializeField]
-    private string scriptURL =
-        "https://script.google.com/macros/s/AKfycbx3LyY3wmehQBK46H9wmtlqdNBPiAKpx9Mj8v-_7NyhX_JMP0cGayMUDM_G_ld9fp-Z/exec";
+    private string googleFormURL =
+      "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+
+    //Entries ID of each Google form fields
+    private string fullNameEntry = "entry.694850595";
+    private string mobileEntry = "entry.274885916";
+    private string dateEntry = "entry.358240503";
+    private string timeEntry = "entry.1324631746";
+    private string coinsEntry = "entry.2055843530";
 
     [Header("Notification UI")]
     [SerializeField] private GameObject popupUI;
@@ -206,15 +213,17 @@ public class WithdrawMoneyManager : MonoBehaviour
     // SEND DATA TO GOOGLE SHEETS
     // =========================================================
 
-    private IEnumerator SendWithdrawalData(string name,string mobile,int claimableCoins)
+    private IEnumerator SendWithdrawalData(
+         string name,
+         string mobile,
+         int claimableCoins)
     {
         isSubmitting = true;
         UpdateWithdrawButtonState();
 
         Debug.Log(
-          $"Sending {claimableCoins} coins to Google Sheets..."
-      );
-
+            $"Sending {claimableCoins} coins to Google Sheets..."
+        );
 
         Debug.Log("Sending withdrawal data to Google Sheets...");
 
@@ -223,14 +232,44 @@ public class WithdrawMoneyManager : MonoBehaviour
         string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
         string currentTime = DateTime.Now.ToString("HH:mm:ss");
 
-        // Data sent to Google Apps Script
-        form.AddField("fullname", name);
-        form.AddField("mobile", mobile);
-        form.AddField("coins", claimableCoins.ToString());
-        form.AddField("date", currentDate);
-        form.AddField("time", currentTime);
+        // =====================================================
+        // GOOGLE FORM DATA
+        // =====================================================
 
-        UnityWebRequest www = UnityWebRequest.Post(scriptURL, form);
+        // Full Name
+        form.AddField(
+            fullNameEntry,
+            name
+        );
+
+        // Mobile Number
+        form.AddField(
+            mobileEntry,
+            mobile
+        );
+
+        // Date
+        form.AddField(
+            dateEntry,
+            currentDate
+        );
+
+        // Time
+        form.AddField(
+            timeEntry,
+            currentTime
+        );
+
+        // Coins Requested
+        // This is explicitly submitted and cannot be omitted.
+        form.AddField(
+            coinsEntry,
+            claimableCoins.ToString()
+        );
+
+
+        UnityWebRequest www =
+            UnityWebRequest.Post(googleFormURL, form);
 
         yield return www.SendWebRequest();
 
@@ -250,18 +289,25 @@ public class WithdrawMoneyManager : MonoBehaviour
             Debug.Log("Withdrawal data saved successfully!");
 
             // Coins deduct only after successful Google Sheet request
-            bool spentSuccessfully = CoinManager.Instance.SpendCoins(claimableCoins);
+            bool spentSuccessfully =
+                CoinManager.Instance.SpendCoins(claimableCoins);
 
             if (spentSuccessfully)
             {
-                int remainingCoins = CoinManager.Instance.CurrentCoins;
-                Debug.Log($"Withdrawal successful! " +
+                int remainingCoins =
+                    CoinManager.Instance.CurrentCoins;
+
+                Debug.Log(
+                    $"Withdrawal successful! " +
                     $"Withdrawn: {claimableCoins} | " +
                     $"Remaining: {remainingCoins}"
                 );
 
 
-                ShowNotification("Money will be credited in your bank within 24 hrs");
+                ShowNotification(
+                    "Money will be credited in your bank within 24 hrs"
+                );
+
                 nameInputField.text = "";
                 mobileNumberInputField.text = "";
             }
