@@ -20,7 +20,7 @@ public class DailyRewardManager : MonoBehaviour
     [Header("GameObject References")]
     [SerializeField] private GameObject rewardPanel;
 
-    public bool isTesting=false;
+    public bool isTesting = false;
 
     [Header("Reward Event")]
     [Tooltip("Connect this to your CoinManager.")]
@@ -41,6 +41,9 @@ public class DailyRewardManager : MonoBehaviour
     private double timerEndTime;
 
     private bool timerRunning;
+
+    // ADDED: Prevent multiple claim attempts while ad is showing
+    private bool waitingForRewardedAd = false;
 
     [Serializable]
     private class RewardDayUI
@@ -65,6 +68,7 @@ public class DailyRewardManager : MonoBehaviour
         claimButton.onClick.RemoveListener(ClaimReward);
         claimButton.onClick.AddListener(ClaimReward);
     }
+
     private void Start()
     {
         ResetTimer();
@@ -77,7 +81,7 @@ public class DailyRewardManager : MonoBehaviour
 
     private void ResetTimer()
     {
-        if(isTesting==true)
+        if (isTesting == true)
         {
             PlayerPrefs.DeleteKey(CURRENT_DAY_KEY);
             PlayerPrefs.DeleteKey(AMOUNT_KEY_PREFIX);
@@ -131,7 +135,6 @@ public class DailyRewardManager : MonoBehaviour
 
             rewardDays[i] = rewardUI;
 
-            // Make sure Day text is correct.
             if (rewardUI.dayText != null)
                 rewardUI.dayText.text = $"DAY {i + 1}";
         }
@@ -158,7 +161,6 @@ public class DailyRewardManager : MonoBehaviour
 
     private void LoadDailyRewardData()
     {
-        // First time playing.
         if (!PlayerPrefs.HasKey(CURRENT_DAY_KEY))
         {
             currentDay = 1;
@@ -186,7 +188,6 @@ public class DailyRewardManager : MonoBehaviour
 
         RefreshAllRewards();
 
-        // If the timer already expired while the game was closed.
         if (timerRunning && GetCurrentUnixTime() >= timerEndTime)
         {
             timerRunning = false;
@@ -234,19 +235,10 @@ public class DailyRewardManager : MonoBehaviour
 
             RewardDayUI rewardUI = rewardDays[i];
 
-            // -------------------------------------------------
-            // ALREADY CLAIMED DAYS
-            // -------------------------------------------------
-
             if (dayNumber < currentDay)
             {
                 SetClaimedUI(rewardUI, dayNumber);
             }
-
-            // -------------------------------------------------
-            // CURRENT DAY
-            // -------------------------------------------------
-
             else if (dayNumber == currentDay)
             {
                 if (currentDayAvailable)
@@ -258,11 +250,6 @@ public class DailyRewardManager : MonoBehaviour
                     SetLockedUI(rewardUI, dayNumber);
                 }
             }
-
-            // -------------------------------------------------
-            // FUTURE DAYS
-            // -------------------------------------------------
-
             else
             {
                 SetLockedUI(rewardUI, dayNumber);
@@ -289,7 +276,6 @@ public class DailyRewardManager : MonoBehaviour
         if (rewardUI.rewardStatusText != null)
             rewardUI.rewardStatusText.text = "CLAIMED";
 
-        // Display the already generated reward.
         int amount = GetRewardAmount(dayNumber);
 
         if (rewardUI.rewardAmountText != null)
@@ -313,7 +299,6 @@ public class DailyRewardManager : MonoBehaviour
         if (rewardUI.rewardStatusText != null)
             rewardUI.rewardStatusText.text = "UNLOCKED";
 
-        // Generate reward only once.
         int amount = GetOrCreateRewardAmount(dayNumber);
 
         if (rewardUI.rewardAmountText != null)
@@ -337,7 +322,6 @@ public class DailyRewardManager : MonoBehaviour
         if (rewardUI.rewardStatusText != null)
             rewardUI.rewardStatusText.text = "LOCKED";
 
-        // Do not reveal reward amount.
         if (rewardUI.rewardAmountText != null)
             rewardUI.rewardAmountText.text = "0";
     }
@@ -389,6 +373,41 @@ public class DailyRewardManager : MonoBehaviour
             return;
         }
 
+        // ADDED: Prevent duplicate clicks while waiting for ad
+        if (waitingForRewardedAd)
+        {
+            return;
+        }
+
+        if (AdManager.Instance == null)
+        {
+            Debug.LogWarning("AdManager is not available.");
+            return;
+        }
+
+        // ADDED: Wait for Rewarded Ad completion
+        waitingForRewardedAd = true;
+
+        claimButton.interactable = false;
+
+        AdManager.Instance.OnRewardEarned -= OnDailyRewardAdCompleted;
+        AdManager.Instance.OnRewardEarned += OnDailyRewardAdCompleted;
+
+        AdManager.Instance.ShowRewardedAd();
+
+        Debug.Log("Daily Reward: Waiting for Rewarded Ad...");
+    }
+
+    // ADDED: Reward is given ONLY after rewarded ad is completed
+    private void OnDailyRewardAdCompleted()
+    {
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.OnRewardEarned -= OnDailyRewardAdCompleted;
+        }
+
+        waitingForRewardedAd = false;
+
         int rewardAmount =
             GetOrCreateRewardAmount(currentDay);
 
@@ -399,15 +418,9 @@ public class DailyRewardManager : MonoBehaviour
         // Give reward to CoinManager or another system.
         onRewardClaimed?.Invoke(rewardAmount);
 
-        // Current day is now considered claimed.
         int claimedDay = currentDay;
 
         currentDay++;
-
-        // -----------------------------------------------------
-        // DAY 7 COMPLETED
-        // Start a new 7-day cycle.
-        // -----------------------------------------------------
 
         if (currentDay > TOTAL_DAYS)
         {
@@ -418,7 +431,6 @@ public class DailyRewardManager : MonoBehaviour
 
         SaveCurrentDay();
 
-        // Start 24-hour timer.
         timerEndTime =
             GetCurrentUnixTime() + rewardIntervalSeconds;
 
@@ -486,14 +498,11 @@ public class DailyRewardManager : MonoBehaviour
         if (claimButton == null)
             return;
 
-        // Claim is possible only when:
-        // 1. Timer is not running.
-        // 2. Current day is valid.
-
         bool canClaim =
             !timerRunning &&
             currentDay >= 1 &&
-            currentDay <= TOTAL_DAYS;
+            currentDay <= TOTAL_DAYS &&
+            !waitingForRewardedAd;
 
         claimButton.interactable = canClaim;
     }
@@ -556,6 +565,7 @@ public class DailyRewardManager : MonoBehaviour
         currentDay = 1;
         timerRunning = false;
         timerEndTime = 0;
+        waitingForRewardedAd = false;
 
         RefreshAllRewards();
 
