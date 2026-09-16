@@ -3222,6 +3222,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &548060024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 548060026}
+  - component: {fileID: 548060025}
+  m_Layer: 0
+  m_Name: admanager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &548060025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548060024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b7dd57ba4dcf5241a98256db45e7adc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AdManager
+  androidAppId: ca-app-pub-9156600449659789~8033456119
+  admobRewardedAdUnitId: ca-app-pub-9156600449659789/4005068429
+  admobInterstitialAdUnitId: ca-app-pub-9156600449659789/2712951877
+  admobBannerAdUnitId: ca-app-pub-9156600449659789/9169765195
+  adChanceOnRestart: 0.5
+  minTimeBetweenAds: 60
+  showBannerOnMainMenu: 1
+  showBannerOnGameOver: 1
+  showBannerOnLevels: 1
+  bannerRefreshInterval: 30
+  useTestAds: 1
+--- !u!4 &548060026
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548060024}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -19.84569, y: -1.88234, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &584000449
 GameObject:
   m_ObjectHideFlags: 0
@@ -4598,7 +4653,6 @@ GameObject:
   - component: {fileID: 921749319}
   - component: {fileID: 921749318}
   - component: {fileID: 921749317}
-  - component: {fileID: 921749321}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -4694,29 +4748,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &921749321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921749316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b7dd57ba4dcf5241a98256db45e7adc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AdManager
-  androidAppId: ca-app-pub-9156600449659789~8033456119
-  admobRewardedAdUnitId: ca-app-pub-9156600449659789/4005068429
-  admobInterstitialAdUnitId: ca-app-pub-9156600449659789/2712951877
-  admobBannerAdUnitId: ca-app-pub-9156600449659789/9169765195
-  adChanceOnRestart: 0.5
-  minTimeBetweenAds: 60
-  showBannerOnMainMenu: 1
-  showBannerOnGameOver: 1
-  showBannerOnLevels: 1
-  bannerRefreshInterval: 30
-  useTestAds: 1
 --- !u!1 &954816050
 GameObject:
   m_ObjectHideFlags: 0
@@ -26886,3 +26917,4 @@ SceneRoots:
   - {fileID: 1834602749}
   - {fileID: 31752099}
   - {fileID: 208405284}
+  - {fileID: 548060026}
