@@ -36,7 +36,7 @@ public class CoinManager : MonoBehaviour
 
         Instance = this;
 
-        //AddCoins(0);
+        //ResetCoins();
         LoadCoins();
         UpdateCoinUI();
 

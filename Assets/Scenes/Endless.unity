@@ -1185,7 +1185,7 @@ MonoBehaviour:
   showBannerOnGameOver: 1
   showBannerOnLevels: 1
   bannerRefreshInterval: 30
-  useTestAds: 1
+  useTestAds: 0
 --- !u!4 &608811918 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2148412142962102433, guid: 57970c6bb711ec24b8d98424b1806f3b, type: 3}

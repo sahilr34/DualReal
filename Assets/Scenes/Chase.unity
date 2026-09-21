@@ -1189,7 +1189,7 @@ MonoBehaviour:
   showBannerOnGameOver: 1
   showBannerOnLevels: 1
   bannerRefreshInterval: 30
-  useTestAds: 1
+  useTestAds: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

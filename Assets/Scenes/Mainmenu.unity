@@ -3261,7 +3261,7 @@ MonoBehaviour:
   showBannerOnGameOver: 1
   showBannerOnLevels: 1
   bannerRefreshInterval: 30
-  useTestAds: 1
+  useTestAds: 0
 --- !u!4 &548060026
 Transform:
   m_ObjectHideFlags: 0
@@ -10321,7 +10321,7 @@ MonoBehaviour:
   timerText: {fileID: 1347729060}
   rewardIntervalSeconds: 86400
   rewardPanel: {fileID: 1303120349}
-  isTesting: 1
+  isTesting: 0
   onRewardClaimed:
     m_PersistentCalls:
       m_Calls:
