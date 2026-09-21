@@ -1179,10 +1179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7dd57ba4dcf5241a98256db45e7adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdManager
-  androidAppId: ca-app-pub-9526502553419115~2160977056
-  admobRewardedAdUnitId: ca-app-pub-9526502553419115/9598086123
-  admobInterstitialAdUnitId: ca-app-pub-9526502553419115/5343196677
-  admobBannerAdUnitId: ca-app-pub-9526502553419115/2046899165
+  androidAppId: ca-app-pub-9156600449659789~8033456119
+  admobRewardedAdUnitId: ca-app-pub-9156600449659789/4005068429
+  admobInterstitialAdUnitId: ca-app-pub-9156600449659789/2712951877
+  admobBannerAdUnitId: ca-app-pub-9156600449659789/9169765195
   adChanceOnRestart: 0.5
   minTimeBetweenAds: 2
   showBannerOnMainMenu: 1
@@ -1275,7 +1275,11 @@ MonoBehaviour:
         m_SelectedSource:
           rid: -2
         m_Provider2DCache:
-          rid: -2
+          rid: 8165363056305242194
+    - rid: 8165363056305242194
+      type: {class: 'Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]', ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_Cache: []
 --- !u!4 &619394802
 Transform:
   m_ObjectHideFlags: 0

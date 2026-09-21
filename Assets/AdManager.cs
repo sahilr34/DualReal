@@ -34,6 +34,9 @@ public class AdManager : MonoBehaviour
 
     public static AdManager Instance;
 
+    // ✅ YEH NAYA HAI - SDK ko sirf ek baar initialize hone deta hai
+    private static bool sdkInitialized = false;
+
     // =========================================================
     // STATE
     // =========================================================
@@ -43,19 +46,16 @@ public class AdManager : MonoBehaviour
     private bool isRewardClaimed = false;
     private bool isLoadingRewardedAd = false;
 
-    // AdMob Ads
     private RewardedAd admobRewardedAd;
     private InterstitialAd admobInterstitialAd;
     private BannerView admobBannerView;
 
-    // Load States
     private bool isRewardedAdLoaded = false;
     private bool isInterstitialAdLoaded = false;
     private bool isBannerLoaded = false;
     private bool isBannerShowing = false;
     private bool isLoadingBanner = false;
 
-    // Banner Refresh
     private Coroutine bannerRefreshCoroutine;
 
     private float lastAdTime = 0f;
@@ -65,7 +65,6 @@ public class AdManager : MonoBehaviour
     private bool bannerShouldBeVisible = true;
     private Coroutine bannerRetryCoroutine;
 
-    // Events
     public Action OnAdCompleted;
     public Action OnRewardEarned;
     public Action OnRewardReset;
@@ -79,7 +78,7 @@ public class AdManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);   // ← Waisa hi commented (control/score ke liye)
             SceneManager.sceneLoaded += OnSceneLoaded;
             InitializeAdMob();
         }
@@ -108,18 +107,30 @@ public class AdManager : MonoBehaviour
     // ADMOB INITIALIZATION
     // =========================================================
 
+    // ✅ YEH METHOD FIX KIYA HAI
     private void InitializeAdMob()
     {
-        Debug.Log("Initializing Google AdMob...");
+        // Agar SDK pehle se initialized hai, sirf ads create/load karo
+        if (sdkInitialized)
+        {
+            Debug.Log("✅ AdMob SDK already initialized. Creating/loading ads only...");
+            isInitialized = true;
+            isRewardClaimed = false;
+            isAdShowing = false;
+            CreateAdMobAds();
+            LoadAdMobAds();
+            return;
+        }
+
+        Debug.Log("🔄 Initializing Google AdMob (first time)...");
 
         MobileAds.Initialize((InitializationStatus status) =>
         {
-            Debug.Log($"✅ Google AdMob initialized successfully.");
+            sdkInitialized = true;
+            Debug.Log("✅ Google AdMob initialized successfully.");
             isInitialized = true;
-            
             isRewardClaimed = false;
             isAdShowing = false;
-            
             CreateAdMobAds();
             LoadAdMobAds();
         });
@@ -137,28 +148,19 @@ public class AdManager : MonoBehaviour
 
     private string GetInterstitialAdUnitId()
     {
-        if (useTestAds)
-        {
-            return "ca-app-pub-3940256099942544/1033173712";
-        }
+        if (useTestAds) return "ca-app-pub-3940256099942544/1033173712";
         return admobInterstitialAdUnitId;
     }
 
     private string GetRewardedAdUnitId()
     {
-        if (useTestAds)
-        {
-            return "ca-app-pub-3940256099942544/5224354917";
-        }
+        if (useTestAds) return "ca-app-pub-3940256099942544/5224354917";
         return admobRewardedAdUnitId;
     }
 
     private string GetBannerAdUnitId()
     {
-        if (useTestAds)
-        {
-            return "ca-app-pub-3940256099942544/6300978111";
-        }
+        if (useTestAds) return "ca-app-pub-3940256099942544/6300978111";
         return admobBannerAdUnitId;
     }
 
@@ -188,7 +190,7 @@ public class AdManager : MonoBehaviour
                 StartCoroutine(RetryLoadBanner());
             };
             admobBannerView.OnAdClicked += () => Debug.Log("AdMob Banner Clicked");
-            
+
             AdRequest request = new AdRequest();
             admobBannerView.LoadAd(request);
         }
@@ -206,14 +208,12 @@ public class AdManager : MonoBehaviour
 
     private void LoadAdMobRewardedAd()
     {
-        // Prevent multiple simultaneous loads
         if (isLoadingRewardedAd)
         {
             Debug.Log("⏳ Rewarded ad is already loading...");
             return;
         }
 
-        // Clean up old ad
         if (admobRewardedAd != null)
         {
             admobRewardedAd.Destroy();
@@ -225,7 +225,7 @@ public class AdManager : MonoBehaviour
 
         string adUnitId = GetRewardedAdUnitId();
         Debug.Log($"🔄 Loading Rewarded Ad: {adUnitId}");
-        
+
         AdRequest request = new AdRequest();
         RewardedAd.Load(adUnitId, request, (ad, error) =>
         {
@@ -249,14 +249,12 @@ public class AdManager : MonoBehaviour
             isRewardedAdLoaded = true;
             Debug.Log($"✅ AdMob Rewarded Ad Loaded: {adUnitId}");
 
-            // Clear old event handlers to prevent duplicates
             admobRewardedAd.OnAdFullScreenContentOpened -= OnRewardedOpened;
             admobRewardedAd.OnAdFullScreenContentClosed -= OnRewardedClosed;
             admobRewardedAd.OnAdFullScreenContentFailed -= OnRewardedFailed;
             admobRewardedAd.OnAdClicked -= OnRewardedClicked;
             admobRewardedAd.OnAdImpressionRecorded -= OnRewardedImpression;
 
-            // Add new event handlers
             admobRewardedAd.OnAdFullScreenContentOpened += OnRewardedOpened;
             admobRewardedAd.OnAdFullScreenContentClosed += OnRewardedClosed;
             admobRewardedAd.OnAdFullScreenContentFailed += OnRewardedFailed;
@@ -278,14 +276,10 @@ public class AdManager : MonoBehaviour
         isRewardedAdLoaded = false;
         Time.timeScale = 1f;
         AudioListener.pause = false;
-        
-        // Restore banner
+
         if (bannerShouldBeVisible && isBannerLoaded)
-        {
             ShowBannerAd();
-        }
-        
-        // Always reload for next use
+
         LoadAdMobRewardedAd();
     }
 
@@ -299,15 +293,8 @@ public class AdManager : MonoBehaviour
         LoadAdMobRewardedAd();
     }
 
-    private void OnRewardedClicked()
-    {
-        Debug.Log("👆 Rewarded Ad Clicked");
-    }
-
-    private void OnRewardedImpression()
-    {
-        Debug.Log("👁️ Rewarded Ad Impression Recorded");
-    }
+    private void OnRewardedClicked() => Debug.Log("👆 Rewarded Ad Clicked");
+    private void OnRewardedImpression() => Debug.Log("👁️ Rewarded Ad Impression Recorded");
 
     private IEnumerator RetryRewardedLoad(float delay)
     {
@@ -335,7 +322,7 @@ public class AdManager : MonoBehaviour
 
         string adUnitId = GetInterstitialAdUnitId();
         Debug.Log($"🔄 Loading Interstitial Ad: {adUnitId}");
-        
+
         AdRequest request = new AdRequest();
         InterstitialAd.Load(adUnitId, request, (ad, error) =>
         {
@@ -370,7 +357,7 @@ public class AdManager : MonoBehaviour
                 isInterstitialAdLoaded = false;
                 Time.timeScale = 1f;
                 AudioListener.pause = false;
-                
+
                 LoadAdMobInterstitialAd();
 
                 if (shouldShowAdOnRestart && restartCallback != null)
@@ -389,7 +376,7 @@ public class AdManager : MonoBehaviour
                 isInterstitialAdLoaded = false;
                 Time.timeScale = 1f;
                 AudioListener.pause = false;
-                
+
                 LoadAdMobInterstitialAd();
 
                 if (shouldShowAdOnRestart && restartCallback != null)
@@ -400,15 +387,8 @@ public class AdManager : MonoBehaviour
                 }
             };
 
-            admobInterstitialAd.OnAdClicked += () =>
-            {
-                Debug.Log("👆 Interstitial Ad Clicked");
-            };
-
-            admobInterstitialAd.OnAdImpressionRecorded += () =>
-            {
-                Debug.Log("👁️ Interstitial Ad Impression Recorded");
-            };
+            admobInterstitialAd.OnAdClicked += () => Debug.Log("👆 Interstitial Ad Clicked");
+            admobInterstitialAd.OnAdImpressionRecorded += () => Debug.Log("👁️ Interstitial Ad Impression Recorded");
         });
     }
 
@@ -438,7 +418,7 @@ public class AdManager : MonoBehaviour
         {
             string bannerAdUnitId = GetBannerAdUnitId();
             Debug.Log($"Loading Banner with Unit ID: {bannerAdUnitId}");
-            
+
             AdRequest request = new AdRequest();
             admobBannerView.LoadAd(request);
         }
@@ -498,15 +478,15 @@ public class AdManager : MonoBehaviour
         {
             Debug.Log("▶️ Showing AdMob Rewarded Ad...");
             isAdShowing = true;
-            
+
             if (isBannerShowing) HideBannerAd();
-            
+
             admobRewardedAd.Show((reward) =>
             {
                 Debug.Log($"🎁 Reward Earned: {reward.Type} - {reward.Amount}");
                 isRewardClaimed = true;
                 OnRewardEarned?.Invoke();
-                
+
                 StartCoroutine(AutoResetRewardClaim());
             });
             return;
@@ -520,13 +500,13 @@ public class AdManager : MonoBehaviour
     private IEnumerator RetryShowRewardedAd()
     {
         yield return new WaitForSeconds(2f);
-        
+
         if (isAdShowing)
         {
             Debug.Log("🔄 Resetting stuck ad showing state...");
             isAdShowing = false;
         }
-        
+
         if (isRewardedAdLoaded && !isRewardClaimed)
         {
             ShowRewardedAd();
@@ -537,54 +517,42 @@ public class AdManager : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // AUTO RESET REWARD CLAIM
-    // =========================================================
-
     private IEnumerator AutoResetRewardClaim()
     {
         yield return new WaitForSeconds(2f);
         ResetRewardClaim();
     }
 
-    // =========================================================
-    // RESET REWARD CLAIM
-    // =========================================================
-
     public void ResetRewardClaim()
     {
         isRewardClaimed = false;
         isAdShowing = false;
         Debug.Log("🔄 Reward claim reset. Revive available again.");
-        
+
         LoadAdMobRewardedAd();
         OnRewardReset?.Invoke();
     }
 
-    // =========================================================
-    // RESET FOR NEW GAME
-    // =========================================================
-
     public void ResetForNewGame()
     {
         Debug.Log("🔄 Resetting AdManager for new game...");
-        
+
         isRewardClaimed = false;
         isAdShowing = false;
-        
+
         if (admobRewardedAd != null)
         {
             admobRewardedAd.Destroy();
             admobRewardedAd = null;
         }
-        
+
         if (isInitialized)
         {
             LoadAdMobRewardedAd();
             LoadAdMobInterstitialAd();
             LoadBannerAd();
         }
-        
+
         lastAdTime = 0f;
         OnRewardReset?.Invoke();
     }
@@ -706,7 +674,7 @@ public class AdManager : MonoBehaviour
             shouldShowBanner = showBannerOnMainMenu;
         else if (sceneName == "Gameover" || sceneName == "GameOver" || sceneName == "Game Over")
             shouldShowBanner = showBannerOnGameOver;
-        else if (sceneName.StartsWith("Level") || sceneName == "Level1" || sceneName == "Level_1")
+        else if (sceneName == "Chase" || sceneName == "Endless")
             shouldShowBanner = showBannerOnLevels;
         else if (sceneName == "Youwin" || sceneName == "YouWin" || sceneName == "You Win")
             shouldShowBanner = true;
